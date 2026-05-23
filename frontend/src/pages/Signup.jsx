@@ -4,7 +4,8 @@ import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import {useNavigate} from "react-router-dom"
 import axios from "axios"
-import { authDataContext } from '../context/authContext';
+import { authDataContext } from '../context/AuthContext.jsx';
+import {userDataContext} from "../context/UserContext.jsx"
 const Signup = () => {
     const [showPass,setShowPass] = useState(false)
     const navigate = useNavigate()
@@ -14,14 +15,15 @@ const Signup = () => {
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const [loading,setLoading] = useState(false)
-    const {servereUrl} = useContext(authDataContext)
-    console.log(servereUrl)
+    const {serverUrl} = useContext(authDataContext)
+    const {userData,setUserData} = useContext(userDataContext)
+    console.log(serverUrl)
     const handleSignUp = async (e) =>{
         console.log("submit called")
         e.preventDefault()
         setLoading(true)
         try {
-            const result = await axios.post(servereUrl+"/api/auth/signup",{
+            const result = await axios.post(serverUrl+"/api/auth/signup",{
                 firstName,lastName,userName,email,password
             },{withCredentials:true})
 
@@ -32,6 +34,8 @@ const Signup = () => {
             setUserName("")
             setEmail("")
             setPassword("")
+            navigate("/")
+            setUserData(result.data)
         } catch (error) {
             console.log(error)
             setLoading(false)

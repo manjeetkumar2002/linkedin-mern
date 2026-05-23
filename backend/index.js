@@ -6,6 +6,7 @@ const authRouter = require("./routes/auth.routes.js")
 const PORT = process.env.PORT || 5000 
 const app = express()
 const cookieParser = require("cookie-parser")
+const userRouter = require("./routes/user.routes.js")
 app.use(express.json())
 app.use(cors({
     origin:"http://localhost:5173",
@@ -13,6 +14,7 @@ app.use(cors({
 }))
 app.use(cookieParser())
 app.use("/api/auth",authRouter)
+app.use("/api/user",userRouter)
 
 app.listen(PORT,()=>{
     connectDB()
