@@ -48,7 +48,7 @@ const Login = () => {
                 <IoMdEyeOff  onClick={()=>setShowPass(!showPass)} className={`${showPass? "":"hidden"} absolute cursor-pointer right-[20px] top-[12px] text-xl text-[#0c74db]`} />
             </div>
             <button type='submit' disabled={loading} className="bg-[#0c74db] cursor-pointer w-full text-white font-semibold py-2 px-4 rounded-xl mt-2">
-                {loading?"Loading...":"Sign Up"}
+                {loading?"Loading...":"Sign In"}
             </button>
             <p onClick={()=>navigate("/signup")} className='mt-4 text-center cursor-pointer'>want to create a new account? <span className='text-[#0c74db]'>Sign Up</span></p>
         </form>

@@ -66,7 +66,7 @@ const login = async (req,res)=>{
 
 const logout = async (req,res)=>{
     try {
-        res.clearcookie("token")
+        res.clearCookie("token")
         return res.status(200).json({message:"logout successfully"})
     } catch (error) {
         console.log(error)
