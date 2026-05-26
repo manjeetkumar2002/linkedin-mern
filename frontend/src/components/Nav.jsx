@@ -27,7 +27,7 @@ const Nav = () => {
         }
     }
     return (
-    <div className='px-1 bg-white w-full h-[80px] fixed top-0 shadow-lg flex items-center  justify-between md:justify-around'> 
+    <div className='px-1 z-[80] left-0 right-0 bg-white w-full h-[80px] fixed top-0 shadow-lg flex items-center  justify-between md:justify-around'> 
         {/* left div*/}
         <div className='flex justify-center items-center gap-[10px]'>       
         <div onClick={()=>setActiveSearch(false)}>
@@ -54,7 +54,7 @@ const Nav = () => {
                 <div className='text-[19px] font-semibold text-gray-700'>
                     {`${userData?.firstName} ${userData?.lastName}`}
                 </div>
-                <button className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2   '>View Profile</button>
+                <button className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>View Profile</button>
                 <hr className='w-full text-gray-700 h-[1px]'/>
                 <div className="flex items-center justify-start text-gray-600 w-full gap-[10px]">
                 <FaUserGroup className='w-[20px] h-[20px]' />

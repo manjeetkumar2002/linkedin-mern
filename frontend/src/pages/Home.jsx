@@ -19,13 +19,13 @@ const Home = () => {
         <div onClick={()=>setEdit(!edit)} className='w-full h-[100px] bg-gray-400 rounded overflow-hidden 
         flex items-center justify-center relative  cursor-pointer'>
           {/* <img src="" alt="background-image" className='w-full' /> */}
-          <CiCamera className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-gray-800 font-extrabold '/>
+          <CiCamera className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-white font-extrabold '/>
         </div>
         {/* dp image */}
         <div onClick={()=>setEdit(!edit)} className=' cursor-pointer absolute top-[65px] left-[35px] w-[70px] h-[70px] overflow-hidden rounded-full items-center justify-center'>
           <img src={dp} alt="profile" className='w-full h-full'/>
         </div>
-        <div onClick={()=>setEdit(!edit)} className='cursor-pointer absolute top-[105px] left-[90px]  text-[#2dc0ff] text-xl font-extrabold'>
+        <div onClick={()=>setEdit(!edit)} className='cursor-pointer absolute top-[105px] left-[90px]   rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold'>
           <FaPlus  />
         </div>
         <div className='mt-[30px] pl-[20px] text-[19px] font-semibold text-gray-700'>
