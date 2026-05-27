@@ -1,8 +1,7 @@
 // multer function to store the image into public folder
 
-import multer from "multer";
+const multer = require("multer")
 
-const upload = multer({storage})
 
 let storage = multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -12,6 +11,7 @@ let storage = multer.diskStorage({
         cb(null,file.originalname)
     }
 })
+const upload = multer({storage})
 
 
 module.exports = upload

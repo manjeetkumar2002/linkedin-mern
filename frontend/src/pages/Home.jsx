@@ -9,6 +9,7 @@ import { userDataContext } from '../context/UserContext';
 import EditProfile from '../components/EditProfile';
 const Home = () => {
   let {userData,edit,setEdit} = useContext(userDataContext)
+  console.log(userData)
   return (
     <div className='relative w-full min-h-[100vh] bg-[#f0efe7] pt-[100px]
     flex flex-col lg:flex-row items-start justify-center gap-[20px] px-[20px]'>
@@ -18,12 +19,12 @@ const Home = () => {
         {/* background image */}
         <div onClick={()=>setEdit(!edit)} className='w-full h-[100px] bg-gray-400 rounded overflow-hidden 
         flex items-center justify-center relative  cursor-pointer'>
-          {/* <img src="" alt="background-image" className='w-full' /> */}
+          <img src={userData.coverImage || null} alt="background-image" className='w-full' />
           <CiCamera className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-white font-extrabold '/>
         </div>
         {/* dp image */}
         <div onClick={()=>setEdit(!edit)} className=' cursor-pointer absolute top-[65px] left-[35px] w-[70px] h-[70px] overflow-hidden rounded-full items-center justify-center'>
-          <img src={dp} alt="profile" className='w-full h-full'/>
+          <img src={userData.profileImage || dp} alt="profile" className='w-full h-full'/>
         </div>
         <div onClick={()=>setEdit(!edit)} className='cursor-pointer absolute top-[105px] left-[90px]   rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold'>
           <FaPlus  />

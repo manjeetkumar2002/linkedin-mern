@@ -49,7 +49,7 @@ const Nav = () => {
             {showPopUp &&  <div className='absolute top-[75px] w-[300px] min-h-[300px] bg-white shadow-lg rounded-lg 
             flex flex-col items-center p-[20px] gap-[20px]'>
                 <div className='w-[70px] h-[70px] overflow-hidden rounded-full'>
-                <img src={dp} alt="profile" className='w-full h-full'/>
+                <img src={userData.profileImage||dp} alt="profile" className='w-full h-full'/>
                 </div>
                 <div className='text-[19px] font-semibold text-gray-700'>
                     {`${userData?.firstName} ${userData?.lastName}`}
@@ -77,7 +77,7 @@ const Nav = () => {
                 <div className='hidden md:block'>Notification</div>
             </div>
             <div onClick={()=>setShowPopUp(!showPopUp)} className='cursor-pointer w-[45px] h-[45px] overflow-hidden rounded-full'>
-                <img src={dp} alt="profile" className='w-full h-full'/>
+                <img src={userData.profileImage || dp} alt="profile" className='w-full h-full'/>
             </div>
         </div>
     </div>

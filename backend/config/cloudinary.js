@@ -12,7 +12,7 @@ const uploadOnCloudinary = async(filePath)=>{
         if(!filePath){
             return null
         }
-        const uploadResult = cloudinary.uploader.upload(filePath)
+        const uploadResult = await cloudinary.uploader.upload(filePath)
         //delete the file from backend
         fs.unlinkSync(filePath)
         return uploadResult.secure_url

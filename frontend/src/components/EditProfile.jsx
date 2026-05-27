@@ -6,7 +6,11 @@ import dp from "../assets/default-profile.jpg"
 import { FaPlus } from "react-icons/fa6";
 import { CiCamera } from "react-icons/ci";
 import { useState } from 'react'
+import { useRef } from 'react'
+import axios from 'axios'
+import { authDataContext } from '../context/AuthContext.jsx'
 const EditProfile = () => {
+    let {serverUrl} = useContext(authDataContext)
     let {edit,setEdit,userData,setUserData} = useContext(userDataContext)
     let [firstName,setFirstName] = useState(userData.firstName || "")
     let [lastName,setLastName] = useState(userData.lastName || "")
@@ -28,6 +32,22 @@ const EditProfile = () => {
       company:"",
       description:""
     })
+    const profileImage = useRef()
+    const coverImage = useRef()
+
+    const [frontendProfileImage,setFrontendProfileImage] = useState(
+      userData.profileImage || dp
+    )
+    const [backendProfileImage,setBackendProfileImage] = useState(
+      null
+    )
+    const [frontendCoverImage,setFrontendCoverImage] = useState(
+      userData.coverImage || null
+    )
+    const [backendCoverImage,setBackendCoverImage] = useState(
+      null
+    )
+
 
     function addSkill() {
       if(newSkills && !skills.includes(newSkills)){
@@ -73,17 +93,62 @@ const EditProfile = () => {
       description:""
     })
     }
+
+    function handleProfileImage(e){
+      let file = e.target.files[0]
+      setBackendProfileImage(file)
+      setFrontendProfileImage(URL.createObjectURL(file))
+    }
+
+    function handleCoverImage(e){
+      let file = e.target.files[0]
+      setBackendCoverImage(file)
+      setFrontendCoverImage(URL.createObjectURL(file))
+    }
+
+    const handleSaveProfile =async ()=>{
+      try {
+        let formData = new FormData()
+        formData.append("firstName",firstName)
+        formData.append("lastName",lastName)
+        formData.append("userName",userName)
+        formData.append("headline",headline)
+        formData.append("gender",gender)
+        formData.append("location",location)
+        formData.append("skills",JSON.stringify(skills))
+        formData.append("education",JSON.stringify(education))
+        formData.append("experience",JSON.stringify(experience))
+        if(backendProfileImage){
+          formData.append("profileImage",backendProfileImage)
+        }
+        if(backendCoverImage){
+          formData.append("coverImage",backendCoverImage)
+        }
+
+        let result = await axios.put(serverUrl+"/api/user/updateprofile",formData,{
+          withCredentials:true
+        })
+        console.log(result)
+        setUserData(result.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     return (
     <div className='flex justify-center items-center z-[100] fixed w-full h-[100vh] top-0'>
+      {/* profile image input */}
+        <input onChange={handleProfileImage} type="file" accept='image/*' hidden ref={profileImage}/>
+        <input onChange={handleCoverImage} type="file" accept='image/*' hidden ref={coverImage}/>
         <div className=' bg-black opacity-[0.5] h-full w-full absolute'></div>
         <div className='overflow-auto  relative p-[10px] w-[90%] max-w-[500px] h-[600px] bg-white absolute shadow-lg rounded-lg'>
             <div><RxCross1 onClick={()=>setEdit(false)} className='w-[25px] h-[25px] font-bold top-[20px] right-[20px] text-gray-800 cursor-pointer absolute text-xl'/></div>
-            <div className='relative mt-[40px] w-full h-[150px] bg-gray-500 rounded-lg'>
-              <img src={null} alt="" className='w-full' />
+            <div onClick={()=>coverImage.current.click()} className='relative mt-[40px] w-full h-[150px] bg-gray-500 rounded-lg overflow-hidden'>
+              <img src={frontendCoverImage} alt="" className='w-full' />
               <CiCamera className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-white font-extrabold '/>
             </div>
-            <div className='absolute top-[150px] left-[30px] w-[80px] h-[80px] overflow-hidden rounded-full'>
-              <img src={dp} alt="profile" className='w-full h-full'/>
+            <div onClick={()=>profileImage.current.click()} className='absolute top-[150px] left-[30px] w-[80px] h-[80px] overflow-hidden rounded-full'>
+              <img src={frontendProfileImage} alt="profile" className='w-full h-full'/>
             </div>
             <div  className='cursor-pointer absolute top-[200px] left-[90px] rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold'>
               <FaPlus  />
@@ -166,7 +231,7 @@ const EditProfile = () => {
                     <button onClick={addExperience} className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>Add</button>
                 </div>
             </div>
-                <button className="bg-[#0c74db] cursor-pointer w-full text-white font-semibold py-2 px-4 rounded-xl mt-2">Save</button>
+                <button onClick={handleSaveProfile} className="bg-[#0c74db] cursor-pointer w-full text-white font-semibold py-2 px-4 rounded-xl mt-2">Save Profile</button>
         </div>
       </div>
     </div>
