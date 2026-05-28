@@ -23,17 +23,17 @@ const Home = () => {
           <CiCamera className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-white font-extrabold '/>
         </div>
         {/* dp image */}
-        <div onClick={()=>setEdit(!edit)} className=' cursor-pointer absolute top-[65px] left-[35px] w-[70px] h-[70px] overflow-hidden rounded-full items-center justify-center'>
+        <div onClick={()=>setEdit(!edit)} className=' cursor-pointer absolute top-[65px] left-[35px] w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center'>
           <img src={userData.profileImage || dp} alt="profile" className='w-full h-full'/>
         </div>
         <div onClick={()=>setEdit(!edit)} className='cursor-pointer absolute top-[105px] left-[90px]   rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold'>
           <FaPlus  />
         </div>
-        <div className='mt-[30px] pl-[20px] text-[19px] font-semibold text-gray-700'>
-          <div> 
+        <div className='mt-[30px] pl-[20px] font-semibold text-gray-700'>
+          <div className='text-[22px] '> 
             {`${userData?.firstName} ${userData?.lastName}`}
           </div>
-          <div  className='text-gray-500 text-[19px] font-semibold'>{userData?.headline || ""}</div>
+          <div  className='text-gray-600 text-[18px] font-semibold'>{userData?.headline || ""}</div>
           <div className='text-gray-500 text-[16px]'>
             {userData?.location}
           </div>

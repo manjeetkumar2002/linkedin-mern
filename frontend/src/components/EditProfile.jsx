@@ -47,7 +47,7 @@ const EditProfile = () => {
     const [backendCoverImage,setBackendCoverImage] = useState(
       null
     )
-
+    let [saving,setSaving] = useState(false)
 
     function addSkill() {
       if(newSkills && !skills.includes(newSkills)){
@@ -107,6 +107,7 @@ const EditProfile = () => {
     }
 
     const handleSaveProfile =async ()=>{
+      setSaving(true)
       try {
         let formData = new FormData()
         formData.append("firstName",firstName)
@@ -130,9 +131,13 @@ const EditProfile = () => {
         })
         console.log(result)
         setUserData(result.data)
+        setSaving(false)
+        setEdit(false)
       } catch (error) {
+        setSaving(false)
         console.log(error)
       }
+      setSaving(false)
     }
 
     return (
@@ -231,7 +236,8 @@ const EditProfile = () => {
                     <button onClick={addExperience} className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>Add</button>
                 </div>
             </div>
-                <button onClick={handleSaveProfile} className="bg-[#0c74db] cursor-pointer w-full text-white font-semibold py-2 px-4 rounded-xl mt-2">Save Profile</button>
+                <button disabled={saving} onClick={handleSaveProfile} className="bg-[#0c74db] cursor-pointer w-full text-white font-semibold py-2 px-4 rounded-xl mt-2">
+                  {saving?"Saving...":"Save Profile"}</button>
         </div>
       </div>
     </div>
