@@ -1,4 +1,4 @@
-const uploadOnCloudinary = require("../config/cloudinary")
+const uploadOnCloudinary = require("../config/cloudinary.js")
 const Post = require("../models/post.model.js")
 
 const createPost = async(req,res)=>{

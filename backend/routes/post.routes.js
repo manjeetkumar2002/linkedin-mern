@@ -1,7 +1,7 @@
 const express = require("express")
-const createPost = require("../controllers/post.controllers.js")
-const isAuth = require("../middlewares/isAuth")
-const upload = require("../middlewares/multer")
+const {createPost} = require("../controllers/post.controllers.js")
+const isAuth = require("../middlewares/isAuth.js")
+const upload = require("../middlewares/multer.js")
 
 const postRouter = express.Router()
 

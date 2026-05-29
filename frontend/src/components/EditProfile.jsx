@@ -141,7 +141,7 @@ const EditProfile = () => {
     }
 
     return (
-    <div className='flex justify-center items-center z-[100] fixed w-full h-[100vh] top-0'>
+    <div className='flex justify-center items-center z-[100] fixed w-full h-[100vh] top-0 left-0 right-0'>
       {/* profile image input */}
         <input onChange={handleProfileImage} type="file" accept='image/*' hidden ref={profileImage}/>
         <input onChange={handleCoverImage} type="file" accept='image/*' hidden ref={coverImage}/>
