@@ -34,6 +34,7 @@ const getPost = async(req,res)=>{
     try{
         const post = await Post.find()
         .populate("author","firstName lastName profileImage headline")
+        .populate("comment.user","firstName lastName profileImage headline")
         .sort({createdAt:-1})
         return res.status(200).json(post)
     }
@@ -67,7 +68,7 @@ const like = async (req,res)=>{
 
 const comment = async (req,res)=>{
     try {
-        const postId = req.params.postId
+        const postId = req.params.id
         const userId = req.userId
         const {content} = req.body
         let post = await Post.findByIdAndUpdate(postId,{
@@ -76,6 +77,7 @@ const comment = async (req,res)=>{
         .populate("comment.user","firstName lastName profileImage headline")
         return res.status(200).json(post)
     } catch (error) {
+        console.log(error)
         return res.status(500).json({message:"comment error ",error})
     }
 }

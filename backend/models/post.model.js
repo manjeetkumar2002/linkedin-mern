@@ -1,5 +1,20 @@
 const {Schema, default: mongoose} = require("mongoose")
-
+const commentSchema = new Schema(
+  {
+    content: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  {
+    timestamps: true, // createdAt and updatedAt for each comment
+  }
+);
 const postSchema = new Schema({
     author:{
         type:Schema.Types.ObjectId,
@@ -21,16 +36,7 @@ const postSchema = new Schema({
         }
     ],
     comment:[
-        {
-            content:{
-                type:String
-            },
-            user:{
-                type:Schema.Types.ObjectId,
-                ref:"User"
-            }
-            
-        }
+        commentSchema
     ]
 },{
     timestamps:true
