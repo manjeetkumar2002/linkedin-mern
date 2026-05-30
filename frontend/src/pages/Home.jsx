@@ -11,6 +11,7 @@ import {RxCross1} from "react-icons/rx"
 import { FaRegImage } from "react-icons/fa6";
 import { authDataContext } from '../context/AuthContext';
 import axios from "axios"
+import Post from '../components/Post';
 const Home = () => {
   let {userData,edit,setEdit} = useContext(userDataContext)
   // post image state variable
@@ -20,7 +21,8 @@ const Home = () => {
   let image = useRef()
   let [uploadPost,setUploadPost] = useState(false)
   let {serverUrl} = useContext(authDataContext)
-  let [posting,setPosting] =useState(false)
+  let [posting,setPosting] = useState(false)
+  let {postData,setPostData} = useContext(userDataContext)
   function handleImage(e) {
     let file = e.target.files[0]
     setBackendImage(file)
@@ -50,7 +52,7 @@ const Home = () => {
     }
   }
   return (
-    <div className='relative w-full min-h-[100vh] bg-[#f0efe7] pt-[100px]
+    <div className='pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] pt-[100px]
     flex flex-col lg:flex-row items-center lg:items-start justify-center gap-[20px] px-[20px]'>
       {edit && <EditProfile/>}
       <Nav></Nav>
@@ -116,13 +118,21 @@ const Home = () => {
       </div>}
       
       {/* posts */}
-      <div className='lg:w-[50%] w-full  min-h-[200px] bg-[#f0efe7] shadow-lg'>
+      <div className='flex flex-col gap-[20px] lg:w-[50%] w-full  min-h-[200px] bg-[#f0efe7] shadow-lg'>
           <div className='p-[20px]  gap-[10px] flex items-center justify-center w-full h-[120px] bg-white shadow-lg rounded-lg'>
               <div className=' cursor-pointer  w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center'>
               <img src={userData.profileImage || dp} alt="profile" className='w-full h-full'/>
               </div>
                 <button onClick={()=>setUploadPost(true)} className='text-start p-[15px] hover:bg-gray-200 cursor-pointer rounded-full w-[80%] h-[60px] border-2 border-gray-500'>start a post</button>
           </div>
+          {
+            postData &&
+            postData.map((post,index)=>(
+              <Post id={post._id} author={post.author}
+              description={post.description} image={post.image} like={post.like} 
+              comment={post.comment} createdAt={post.createdAt} key={index}/>
+            ))
+          }
       </div>
       {/* sidebar */}
       <div className='lg:w-[25%] w-full  min-h-[200px] bg-white shadow-lg'></div>

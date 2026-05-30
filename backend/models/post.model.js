@@ -14,7 +14,7 @@ const postSchema = new Schema({
         type:String
     },
     // multiple users can comments and likes
-    likes:[
+    like:[
         {
             type:Schema.Types.ObjectId,
             ref:"User"
