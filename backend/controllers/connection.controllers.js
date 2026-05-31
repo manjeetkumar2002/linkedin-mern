@@ -120,4 +120,22 @@ const getConnectionStatus = async(req,res)=>{
     }
 }
 
-module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus}
+const removeConnection = async (req,res)=>{
+    try {
+        const myId = req.userId
+        const otherUserId = req.params.userId
+
+        await User.findByIdAndUpdate(myId,{
+            $pull:{connection:otherUserId}
+        })
+
+        await User.findByIdAndUpdate(otherUserId,{
+            $pull:{connection:myId}
+        })
+
+        return res.json({message:"Connection removed Successfully"})
+    } catch (error) {
+        return res.status(500).json({message:"removedConnection Error :",error})
+    }
+}
+module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus,removeConnection}
