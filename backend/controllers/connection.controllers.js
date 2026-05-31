@@ -138,4 +138,17 @@ const removeConnection = async (req,res)=>{
         return res.status(500).json({message:"removedConnection Error :",error})
     }
 }
+
+const getConnectionRequests = async(req,res)=>{
+    try{
+        const userId = req.userId
+        const requests = await Connection.find({receiver:userId,status:"pending"})
+        .populate("sender","firstName lastName email userName profileImage headline")
+
+        return res.status(200).json(requests)
+    }
+    catch(error){
+        return res.status(500).json({message:"getConnectionRequests error",error})
+    }
+}
 module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus,removeConnection}
