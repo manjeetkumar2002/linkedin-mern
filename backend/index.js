@@ -8,6 +8,7 @@ const app = express()
 const cookieParser = require("cookie-parser")
 const userRouter = require("./routes/user.routes.js")
 const postRouter = require("./routes/post.routes.js")
+const connectionRouter = require("./routes/connection.routes.js")
 app.use(express.json())
 app.use(cors({
     origin:"http://localhost:5173",
@@ -17,6 +18,7 @@ app.use(cookieParser())
 app.use("/api/auth",authRouter)
 app.use("/api/user",userRouter)
 app.use("/api/post",postRouter)
+app.use("/api/connection",connectionRouter)
 app.listen(PORT,()=>{
     connectDB()
     console.log("Server listen at port : ",PORT)
