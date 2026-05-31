@@ -87,5 +87,37 @@ const rejectConnection = (req,res)=>{
     }
 }
 
+const getConnectionStatus = async(req,res)=>{
+    try {
+        const targetUserId = req.params.userId
+        const currentUserId = req.userId
 
-module.exports = {sendConnection,acceptConnection,rejectConnection}
+        let currentUser = await User.findById(currentUserId)
+        if(currentUser.connection.includes(targetUserId)){
+            return res.json({status:"disconnect"})
+        }
+
+        const pendingRequest = await Connection.findOne({
+            $or:[
+                {sender:currentUserId,receiver:targetUserId},
+                {sender:targetUserId,receiver:currentUserId}
+            ],
+            status:"pending"
+        })
+
+        if(pendingRequest){
+            if(pendingRequest.sender.toString()===currentUserId.toString()){
+                return res.json({status:"pending"})
+            }
+            else{
+                return res.json({status:"received",requestId:pendingRequest._id})
+            }
+        }
+        // if no connection or pending res found
+        return res.json({status:"Connect"})
+    } catch (error) {
+        return res.status(500).json({message:"gentConnectionStatus error :",error})
+    }
+}
+
+module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus}
