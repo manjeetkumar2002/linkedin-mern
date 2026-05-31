@@ -151,4 +151,17 @@ const getConnectionRequests = async(req,res)=>{
         return res.status(500).json({message:"getConnectionRequests error",error})
     }
 }
-module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus,removeConnection}
+
+const getUserConnections = async (req,res)=>{
+    try {
+        const userId = req.userId
+        const user = await User.findById(userId)
+        .populate("connection","firstName lastName  userName profileImage headline connections")
+        
+        return res.status(200).json(user.connection)
+    } catch (error) {
+        return res.status(500).json({message:"getUserConnections error :",error})
+    }
+}
+
+module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus,removeConnection,getUserConnections}
