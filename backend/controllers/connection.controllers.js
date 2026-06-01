@@ -1,5 +1,7 @@
 const { Connection, connect } = require("mongoose")
 const User = require("../models/user.model")
+const { getIO } = require("../config/socket.js");
+const {userSocketMap} = require("../index.js")
 const sendConnection = async (req,res)=>{
     try {
         let {id} = req.params // recievers id
@@ -28,13 +30,28 @@ const sendConnection = async (req,res)=>{
             receiver:id
         })
 
+        let receiverSocketId = userSocketMap.get(id) // id is receiver id
+        let senderSocketId = userSocketMap.get(sender)
+        if(receiverSocketId){
+            getIO().to(receiverSocketId).emit("statusUpdate",{
+                updatedUserId:sender,
+                newStatus:"received"
+            })
+        }
+
+        if(senderSocketId){
+            getIO().to(senderSocketId).emit("statusUpdate",{
+                updatedUserId:id,
+                newStatus:"pending"
+            })
+        }
         return res.status(200).json(newRequest)
     } catch (error) {
         return res.status(500).json({message:"sendconnection error ",error})
     }
 }
 
-const acceptConnection = (req,res)=>{
+const acceptConnection = async (req,res)=>{
     try {
         const {connectionId} = req.params //connection id
         let connection = await Connection.findById(connectionId)
@@ -58,14 +75,28 @@ const acceptConnection = (req,res)=>{
         await User.findByIdAndUpdate(connection.sender._id,{
             $addToSet:{connection:req.userId}
         })
+        let receiverSocketId = userSocketMap.get(connection.receiver._id.toString()) // id is receiver id
+        let senderSocketId = userSocketMap.get(connection.sender._id.toString())
+        if(receiverSocketId){
+            getIO().to(receiverSocketId).emit("statusUpdate",{
+                updatedUserId:connection.sender._id.toString(),
+                newStatus:"disconnect"
+            })
+        }
 
+        if(senderSocketId){
+            getIO().to(senderSocketId).emit("statusUpdate",{
+                updatedUserId:req.usedId,
+                newStatus:"disconnect"
+            })
+        }
         return res.status(200).json({message:"connection accepted"})
     } catch (error) {
         return res.status(500).json({message:"connection accepted error : ",error})
     }
 }
 
-const rejectConnection = (req,res)=>{
+const rejectConnection = async (req,res)=>{
     try {
         const {connectionId} = req.params //connection id
         let connection = await Connection.findById(connectionId)
@@ -132,7 +163,21 @@ const removeConnection = async (req,res)=>{
         await User.findByIdAndUpdate(otherUserId,{
             $pull:{connection:myId}
         })
+        let receiverSocketId = userSocketMap.get(otherUserId) // id is receiver id
+        let senderSocketId = userSocketMap.get(myId)
+        if(receiverSocketId){
+            getIO().to(receiverSocketId).emit("statusUpdate",{
+                updatedUserId:myId,
+                newStatus:"connect"
+            })
+        }
 
+        if(senderSocketId){
+            getIO().to(senderSocketId).emit("statusUpdate",{
+                updatedUserId:otherUserId,
+                newStatus:"connect"
+            })
+        }
         return res.json({message:"Connection removed Successfully"})
     } catch (error) {
         return res.status(500).json({message:"removedConnection Error :",error})
@@ -164,4 +209,4 @@ const getUserConnections = async (req,res)=>{
     }
 }
 
-module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus,removeConnection,getUserConnections}
+module.exports = {sendConnection,acceptConnection,rejectConnection,getConnectionStatus,removeConnection,getUserConnections,getConnectionRequests}

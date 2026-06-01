@@ -56,7 +56,7 @@ const Nav = () => {
                 </div>
                 <button className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>View Profile</button>
                 <hr className='w-full text-gray-700 h-[1px]'/>
-                <div className="flex items-center justify-start text-gray-600 w-full gap-[10px]">
+                <div  onClick={()=>navigate("/network")} className="flex items-center justify-start text-gray-600 w-full gap-[10px]">
                 <FaUserGroup className='w-[20px] h-[20px]' />
                 <div>My Networks</div>
             </div>
@@ -68,7 +68,7 @@ const Nav = () => {
                 <MdHome className='w-[23px] h-[23px]' />
                 <div>Home</div>
             </div>
-            <div className='hidden md:flex flex-col items-center justify-center text-gray-600'>
+            <div onClick={()=>navigate("/network")}  className='hidden md:flex flex-col items-center justify-center text-gray-600'>
                 <FaUserGroup className='w-[20px] h-[20px]' />
                 <div>My Networks</div>
             </div>

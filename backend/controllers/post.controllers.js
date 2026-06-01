@@ -1,3 +1,4 @@
+const { getIO } = require("../config/socket.js");
 const uploadOnCloudinary = require("../config/cloudinary.js")
 const Post = require("../models/post.model.js")
 
@@ -58,8 +59,14 @@ const like = async (req,res)=>{
         else{
             post.like.push(userId)
         }
-        await post.save()
-        return res.status(200).json(post)
+        await post.save();
+
+        getIO().emit("likeUpdated", {
+        postId,
+        likes: post.like,
+        });
+
+        return res.status(200).json(post);
     } catch (error) {
         console.log(error)
         return res.status(500).json({message:"like error ",error})
@@ -75,10 +82,16 @@ const comment = async (req,res)=>{
             $push:{comment:{content,user:userId}}
         },{new:true})
         .populate("comment.user","firstName lastName profileImage headline")
+        
+        getIO().emit("commentAdded", {
+        postId,
+        comm: post.comment,
+        });
+
         return res.status(200).json(post)
     } catch (error) {
         console.log(error)
-        return res.status(500).json({message:"comment error ",error})
+        return res.status(500).json({message:"comment error ",error:error.message})
     }
 }
 

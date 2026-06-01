@@ -8,7 +8,10 @@ import axios  from "axios";
 import { BiSolidLike } from "react-icons/bi";
 import { userDataContext } from "../context/UserContext";
 import { LuSendHorizontal } from "react-icons/lu";
+import {io} from "socket.io-client"
+import ConnectionButton from "./ConnectionButton";
 
+let socket = io("http://localhost:8000")
 const Post = ({ id, author, like=[], comment=[], description, image,createdAt }) => {
 
 const [more,setMore] = useState(false)
@@ -39,7 +42,24 @@ console.log(comments)
         console.log(error)
       }
   }
+  useEffect(()=>{
+    socket.on("likeUpdated",({postId,likes})=>{
+      if(postId == id){
+        setLikes(likes)
+      }
+    })
 
+    socket.on("commentAdded",({postId,comm})=>{
+      if(postId == id){
+        setComments(comm)
+      }
+    })
+
+    return ()=>{
+      socket.off("likeUpdated")
+      socket.off("commentAdded")
+    }
+  },[id])
   useEffect(()=>{
     getPost()
   },[likes,setLikes,comments,setComments])
@@ -71,7 +91,9 @@ console.log(comments)
       </div>
       {/* connection btn */}
       <div>
-        <button></button>
+        {userData._id!=author._id && 
+        <ConnectionButton userId={author._id}/>
+        }
       </div>
       </div>
       {/* decription */}
@@ -91,7 +113,7 @@ console.log(comments)
       <div>
         <div className="pb-2 flex justify-between text-[18px] border-b-1 border-gray-500">
           <div className="flex items-center gap-1"><AiOutlineLike className="text-blue-500" /><span>{likes.length}</span></div>
-          <div  onClick={()=>setShowComment(!showComment)} className="cursor-pointer flex items-center gap-1"><span>{comments.length}</span>comments</div>
+          <div  onClick={()=>setShowComment(!showComment)} className="cursor-pointer flex items-center gap-1"><span>{comments?.length}</span>comments</div>
         </div>
         <div className="text-[18px] font-semibold flex gap-[10px] items-center mt-[20px]">
           <div  onClick={handleLike} className={`flex gap-[10px] items-center cursor-pointer ${likes.includes(userData._id)?"text-blue-500":""}`}>{likes.includes(userData._id)?<BiSolidLike className="text-blue-500" />:<AiOutlineLike />} {likes.includes(userData._id)?"Liked":"Like"}</div>
@@ -104,7 +126,7 @@ console.log(comments)
           </form>
 
           <div className="flex flex-col gap-[10px]">
-            {comments.map((com)=>(
+            {comments?.map((com)=>(
               <div className="mt-2 flex flex-col gap-[10px] border-b-2 border-b-gray-300 ">
                 <div className="w-full flex justify-start items-center gap-[10px]">
                   <div className=" cursor-pointer w-[40px] h-[40px] overflow-hidden rounded-full flex items-center justify-center">
