@@ -21,7 +21,7 @@ const ConnectionButton = ({userId}) => {
     }
     const handleRemoveConnection=async()=>{
         try {
-            const result = await axios.delete(`${serverUrl}/api/connection/remove/${userId}`,{},{withCredentials:true})
+            const result = await axios.delete(`${serverUrl}/api/connection/remove/${userId}`,{withCredentials:true})
             console.log(result)
         } catch (error) {
             console.log(error)

@@ -17,8 +17,10 @@ const sendConnection = async (req,res)=>{
         }
 
         let existingConnection = await Connection.findOne({
-            sender,
-            receiver:id,
+            $or:[
+                {sender,receiver:id},
+                {sender:id,receiver:sender}
+            ],
             status:"pending"
         })
 
@@ -70,24 +72,24 @@ const acceptConnection = async (req,res)=>{
 
         // update the connection array in both sender and receiver
         await User.findByIdAndUpdate(req.userId,{
-            $addToSet:{connections:connections.sender._id}
+            $addToSet:{connections:connection.sender}
         })
 
-        await User.findByIdAndUpdate(connections.sender._id,{
+        await User.findByIdAndUpdate(connection.sender,{
             $addToSet:{connections:req.userId}
         })
-        let receiverSocketId = userSocketMap.get(connection.receiver._id.toString()) // id is receiver id
-        let senderSocketId = userSocketMap.get(connection.sender._id.toString())
+        let receiverSocketId = userSocketMap.get(connection.receiver.toString()) // id is receiver id
+        let senderSocketId = userSocketMap.get(connection.sender.toString())
         if(receiverSocketId){
             getIO().to(receiverSocketId).emit("statusUpdate",{
-                updatedUserId:connection.sender._id.toString(),
+                updatedUserId:connection.sender.toString(),
                 newStatus:"disconnect"
             })
         }
 
         if(senderSocketId){
             getIO().to(senderSocketId).emit("statusUpdate",{
-                updatedUserId:req.usedId,
+                updatedUserId:req.userId,
                 newStatus:"disconnect"
             })
         }
@@ -110,7 +112,15 @@ const rejectConnection = async (req,res)=>{
         if(connection.status != "pending"){
             return res.status(400).json({message:"request under process"})
         }
+        // let receiverSocketId = userSocketMap.get(connection.receiver.toString()) // id is receiver id
+        let senderSocketId = userSocketMap.get(connection.sender.toString())
 
+        if(senderSocketId){
+            getIO().to(senderSocketId).emit("statusUpdate",{
+                updatedUserId:req.userId,
+                newStatus:"connect"
+            })
+        }
         connection.status = "rejected"
         await connection.save()
 
