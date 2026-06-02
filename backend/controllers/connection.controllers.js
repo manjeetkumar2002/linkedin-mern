@@ -1,7 +1,7 @@
-const { Connection, connect } = require("mongoose")
+const Connection = require("../models/connection.model.js")
 const User = require("../models/user.model")
-const { getIO } = require("../config/socket.js");
-const {userSocketMap} = require("../index.js")
+const { getIO } = require("../socket.js");
+const {userSocketMap} = require("../socketStore.js")
 const sendConnection = async (req,res)=>{
     try {
         let {id} = req.params // recievers id
@@ -12,7 +12,7 @@ const sendConnection = async (req,res)=>{
             return res.status(400).json({message:"you can not send request yourself"})
         }
 
-        if(user.connection.includes(id)){
+        if(user.connections.includes(id)){
             return res.status(400).json({message:"you are already connected"})
         }
 
@@ -47,6 +47,7 @@ const sendConnection = async (req,res)=>{
         }
         return res.status(200).json(newRequest)
     } catch (error) {
+        console.log(error)
         return res.status(500).json({message:"sendconnection error ",error})
     }
 }
@@ -69,11 +70,11 @@ const acceptConnection = async (req,res)=>{
 
         // update the connection array in both sender and receiver
         await User.findByIdAndUpdate(req.userId,{
-            $addToSet:{connection:connection.sender._id}
+            $addToSet:{connections:connections.sender._id}
         })
 
-        await User.findByIdAndUpdate(connection.sender._id,{
-            $addToSet:{connection:req.userId}
+        await User.findByIdAndUpdate(connections.sender._id,{
+            $addToSet:{connections:req.userId}
         })
         let receiverSocketId = userSocketMap.get(connection.receiver._id.toString()) // id is receiver id
         let senderSocketId = userSocketMap.get(connection.sender._id.toString())
@@ -92,6 +93,7 @@ const acceptConnection = async (req,res)=>{
         }
         return res.status(200).json({message:"connection accepted"})
     } catch (error) {
+        console.log(error)
         return res.status(500).json({message:"connection accepted error : ",error})
     }
 }
@@ -122,9 +124,8 @@ const getConnectionStatus = async(req,res)=>{
     try {
         const targetUserId = req.params.userId
         const currentUserId = req.userId
-
         let currentUser = await User.findById(currentUserId)
-        if(currentUser.connection.includes(targetUserId)){
+        if(currentUser?.connections?.includes(targetUserId)){
             return res.json({status:"disconnect"})
         }
 
@@ -147,6 +148,7 @@ const getConnectionStatus = async(req,res)=>{
         // if no connection or pending res found
         return res.json({status:"Connect"})
     } catch (error) {
+        console.log(error)
         return res.status(500).json({message:"gentConnectionStatus error :",error})
     }
 }
@@ -157,11 +159,11 @@ const removeConnection = async (req,res)=>{
         const otherUserId = req.params.userId
 
         await User.findByIdAndUpdate(myId,{
-            $pull:{connection:otherUserId}
+            $pull:{connections:otherUserId}
         })
 
         await User.findByIdAndUpdate(otherUserId,{
-            $pull:{connection:myId}
+            $pull:{connections:myId}
         })
         let receiverSocketId = userSocketMap.get(otherUserId) // id is receiver id
         let senderSocketId = userSocketMap.get(myId)
@@ -187,12 +189,13 @@ const removeConnection = async (req,res)=>{
 const getConnectionRequests = async(req,res)=>{
     try{
         const userId = req.userId
+        
         const requests = await Connection.find({receiver:userId,status:"pending"})
         .populate("sender","firstName lastName email userName profileImage headline")
-
         return res.status(200).json(requests)
     }
     catch(error){
+        console.log(error)
         return res.status(500).json({message:"getConnectionRequests error",error})
     }
 }
@@ -201,9 +204,9 @@ const getUserConnections = async (req,res)=>{
     try {
         const userId = req.userId
         const user = await User.findById(userId)
-        .populate("connection","firstName lastName  userName profileImage headline connections")
+        .populate("connections","firstName lastName  userName profileImage headline connections")
         
-        return res.status(200).json(user.connection)
+        return res.status(200).json(user.connections)
     } catch (error) {
         return res.status(500).json({message:"getUserConnections error :",error})
     }

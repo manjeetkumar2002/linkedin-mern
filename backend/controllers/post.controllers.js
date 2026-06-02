@@ -1,4 +1,4 @@
-const { getIO } = require("../config/socket.js");
+const { getIO } = require("../socket.js");
 const uploadOnCloudinary = require("../config/cloudinary.js")
 const Post = require("../models/post.model.js")
 
@@ -60,7 +60,7 @@ const like = async (req,res)=>{
             post.like.push(userId)
         }
         await post.save();
-
+        // broadcasting updated likes to all users
         getIO().emit("likeUpdated", {
         postId,
         likes: post.like,
@@ -82,7 +82,7 @@ const comment = async (req,res)=>{
             $push:{comment:{content,user:userId}}
         },{new:true})
         .populate("comment.user","firstName lastName profileImage headline")
-        
+        // broadcasting the newly added comment to all user
         getIO().emit("commentAdded", {
         postId,
         comm: post.comment,

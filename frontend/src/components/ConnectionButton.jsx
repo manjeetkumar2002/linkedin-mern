@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import io from "socket.io-client"
@@ -9,7 +9,7 @@ const socket = io("http://localhost:8000")
 const ConnectionButton = ({userId}) => {
     const {serverUrl} = useContext(authDataContext)
     const {userData,setUserData}  = useContext(userDataContext)
-    let [status,setStatus] = useStatus("")
+    let [status,setStatus] = useState("")
     let navigate = useNavigate()
     const handleSendConnection = async()=>{
         try {
@@ -30,8 +30,8 @@ const ConnectionButton = ({userId}) => {
     
     const handleGetStatus = async()=>{
         try {
-            const result = await axios.post(`${serverUrl}/api/connection/getStatus/${userId}`,{},{withCredentials:true})
-            console.log(result)
+            const result = await axios.get(`${serverUrl}/api/connection/getstatus/${userId}`,{withCredentials:true})
+            console.log("status: ",result.data.status)
             setStatus(result.data.status)
         } catch (error) {
             console.log(error)

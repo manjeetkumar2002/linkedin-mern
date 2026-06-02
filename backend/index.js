@@ -13,8 +13,8 @@ const { Server } = require("socket.io")
 const app = express()
 const server = http.createServer(app)
 // socket.io
-const { setIO } = require("./config/socket.js");
-
+const { setIO } = require("./socket.js");
+const {userSocketMap} = require("./socketStore.js")
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
@@ -34,13 +34,15 @@ app.use("/api/auth",authRouter)
 app.use("/api/user",userRouter)
 app.use("/api/post",postRouter)
 app.use("/api/connection",connectionRouter)
-const userSocketMap = new Map()
+
+
+
 io.on("connection",(socket)=>{
     console.log("user connected",socket.id)
     socket.on("register",(userId)=>{
         userSocketMap.set(userId,socket.id)
     })
-    socket.on("disconnect",(socket)=>{
+    socket.on("disconnect",()=>{
         console.log("user disconnected",socket.id)
     })
 })
@@ -51,5 +53,3 @@ server.listen(PORT,()=>{
     connectDB()
     console.log("Server listen at port : ",PORT)
 })
-module.exports = {userSocketMap}
-module.exports = io
