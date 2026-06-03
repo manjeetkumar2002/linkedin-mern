@@ -11,7 +11,7 @@ import axios from 'axios';
 import {useNavigate} from "react-router-dom"
 const Nav = () => {
     const [activeSearch,setActiveSearch] = useState(false)
-    const {userData,setUserData} = useContext(userDataContext)
+    const {userData,setUserData,getProfile} = useContext(userDataContext)
     const {serverUrl} = useContext(authDataContext)
     const navigate = useNavigate()
     const [showPopUp,setShowPopUp] = useState(false)
@@ -54,7 +54,7 @@ const Nav = () => {
                 <div className='text-[19px] font-semibold text-gray-700'>
                     {`${userData?.firstName} ${userData?.lastName}`}
                 </div>
-                <button onClick={()=>navigate("/profile")} className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>View Profile</button>
+                <button onClick={()=>getProfile(userData.userName)} className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>View Profile</button>
                 <hr className='w-full text-gray-700 h-[1px]'/>
                 <div  onClick={()=>navigate("/network")} className="flex items-center justify-start text-gray-600 w-full gap-[10px]">
                 <FaUserGroup className='w-[20px] h-[20px]' />
