@@ -11,31 +11,16 @@ import { authDataContext } from "../context/AuthContext";
 import axios from "axios";
 import Post from "../components/Post.jsx";
 import { useEffect } from "react";
+import ConnectionButton from "../components/ConnectionButton.jsx";
 const Profile = () => {
-  let { userData, setUserData, edit, setEdit } = useContext(userDataContext);
-  let [userConnection, setUserConnection] = useState([]);
+  let { userData, setUserData, edit, setEdit,profileData,setProfileData } = useContext(userDataContext);
   let { serverUrl } = useContext(authDataContext);
   let { postData, setPostData } = useContext(userDataContext);
   let [profilePost, setProfilePost] = useState([]);
 
-  const handleGetUserConnection = async () => {
-    try {
-      let result = await axios.get(`${serverUrl}/api/connection`, {
-        withCredentials: true,
-      });
-      setUserConnection(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    handleGetUserConnection();
-  }, []);
-
   useEffect(() => {
     // filter the user post
-    setProfilePost(postData.filter((post) => post.author._id == userData._id));
+    setProfilePost(postData.filter((post) => post.author._id == profileData._id));
   }, []);
   return (
     <div className="gap-[10px] w-full bg-[#f0efe7] flex flex-col items-center pt-[100px]">
@@ -51,7 +36,7 @@ const Profile = () => {
                     flex items-center justify-center relative  cursor-pointer"
         >
           <img
-            src={userData.coverImage || null}
+            src={profileData.coverImage || null}
             alt="background-image"
             className="w-full"
           />
@@ -63,7 +48,7 @@ const Profile = () => {
           className=" cursor-pointer absolute top-[140px] left-[35px] w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center"
         >
           <img
-            src={userData.profileImage || dp}
+            src={profileData.profileImage || dp}
             alt="profile"
             className="w-full h-full"
           />
@@ -74,26 +59,32 @@ const Profile = () => {
         >
           <FaPlus />
         </div>
-        <div className="mt-[30px] pl-[20px] font-semibold text-gray-700">
+        <div className="mt-[30px] pl-[20px] py-[10px] font-semibold text-gray-700">
           <div className="text-[22px] ">
-            {`${userData?.firstName} ${userData?.lastName}`}
+            {`${profileData?.firstName} ${profileData?.lastName}`}
           </div>
           <div className="text-gray-600 text-[18px] font-semibold">
-            {userData?.headline || ""}
+            {profileData?.headline || ""}
           </div>
-          <div className="text-gray-500 text-[16px]">{userData?.location}</div>
+          <div className="text-gray-500 text-[16px]">{profileData?.location}</div>
           <div className="text-gray-500 text-[16px]">
-            {userConnection.length} connection
+            {profileData.connections.length} connection
           </div>
+          {profileData._id==userData._id && 
           <div>
             <button
               onClick={() => setEdit(!edit)}
-              className="my-[20px] ml-[10px]  min-w-[150px] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2  flex gap-[10px] justify-center items-center "
+              className="my-[10px] ml-[10px]  min-w-[150px] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2  flex gap-[10px] justify-center items-center "
             >
               Edit Profile
               <HiPencil />
             </button>
-          </div>
+          </div>}
+
+          {profileData._id!=userData._id && 
+          <div className="py-[10px]">
+            <ConnectionButton userId={profileData._id}/>
+          </div>}
         </div>
       </div>
 
@@ -105,7 +96,7 @@ const Profile = () => {
         {`Post (${profilePost.length})`}
       </div>
       {/* all post of user */}
-      <div className="max-w-[900px] w-full">
+      <div className="max-w-[900px] w-full flex flex-col gap-[10px]">
         {profilePost.map((post, index) => (
           <Post
             key={index}
@@ -120,7 +111,7 @@ const Profile = () => {
       </div>
 
       {/* skills of user */}
-      {userData.skills.length >0 && (
+      {profileData.skills.length >0 && (
         <div >
           <div
             className="rounded-lg w-full  flex-col gap-[10px]  items-center      
@@ -130,18 +121,19 @@ const Profile = () => {
             {/* all skills */}
           <div className="flex items-center flex-wrap gap-[10px] p-[20px] text-[18px] text-gray-600">
             {
-              userData.skills.map((skill,index)=>(
+              profileData.skills.map((skill,index)=>(
                 <div key={index}>
                     {skill}
                 </div>
               ))
             }
-            <button
+            {profileData._id == userData._id && <button
               onClick={() => setEdit(!edit)}
               className="min-w-[150px] h-[40px] ml-[20px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2  flex gap-[10px] justify-center items-center "
             >
               Add Skill
-            </button>
+            </button>}
+            
           </div>
           </div>
           
@@ -149,7 +141,7 @@ const Profile = () => {
       )}
 
       {/* Education of user */}
-      {userData.education.length >0 && (
+      {profileData.education.length >0 && (
         <div >
           <div
             className="rounded-lg w-full  flex-col gap-[10px]  items-center      
@@ -159,7 +151,7 @@ const Profile = () => {
             
           <div className="flex flex-col items-start wrap gap-[10px] p-[20px] text-[18px] text-gray-600">
             {
-              userData.education.map((edu,index)=>(
+              profileData.education.map((edu,index)=>(
                 <div key={index}>
                   <div>
                    College : {edu.college}
@@ -174,12 +166,13 @@ const Profile = () => {
                 
               ))
             }
-            <button
+            {profileData._id == userData._id && <button
               onClick={() => setEdit(!edit)}
               className="min-w-[150px] h-[40px] ml-[10px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2  flex gap-[10px] justify-center items-center "
             >
               Add Education
-            </button>
+            </button>}
+            
           </div>
           </div>
           
@@ -188,7 +181,7 @@ const Profile = () => {
 
 
       {/* Experience of user */}
-      {userData.experience.length >0 && (
+      {profileData.experience.length >0 && (
         <div >
           <div
             className="rounded-lg w-full  flex-col gap-[10px]  items-center      
@@ -198,7 +191,7 @@ const Profile = () => {
             
           <div className="flex flex-col items-start wrap gap-[10px] p-[20px] text-[18px] text-gray-600">
             {
-              userData.experience.map((exp,index)=>(
+              profileData.experience.map((exp,index)=>(
                 <div key={index}>
                   <div>
                    Title : {exp.title}
@@ -213,12 +206,13 @@ const Profile = () => {
                 
               ))
             }
-            <button
+            {profileData._id == userData._id &&<button
               onClick={() => setEdit(!edit)}
               className="min-w-[150px] h-[40px] ml-[10px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2  flex gap-[10px] justify-center items-center "
             >
               Add Experience
-            </button>
+            </button>}
+            
           </div>
           </div>
           

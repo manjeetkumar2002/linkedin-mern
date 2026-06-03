@@ -21,6 +21,7 @@ let [likes,setLikes] = useState(like || [])
 let [commentContent,setCommentContent] = useState("")
 let [comments,setComments] = useState(comment || [])
 let [showComment,setShowComment] = useState(false)
+let {getProfile,profileData,setProfileData} = useContext(userDataContext)
 console.log(comments)
   const handleLike = async()=>{
     try {
@@ -68,7 +69,7 @@ console.log(comments)
     <div className="flex flex-col gap-[10px] p-[20px] w-full min-h-[200px] bg-white rounded-lg shadow-lg">
       <div className="flex justify-between items-center">
             {/* profile image */}
-      <div className="flex justify-center items-center gap-[10px] ">
+      <div onClick={()=>getProfile(author?.userName)} className="flex justify-center items-center gap-[10px] ">
         <div className="cursor-pointer w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center">
           <img
             src={author?.profileImage || dp}

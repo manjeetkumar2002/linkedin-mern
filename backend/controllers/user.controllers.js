@@ -10,7 +10,7 @@ const getCurrentUser = async(req,res)=>{
         res.status(200).json(user)
     } catch (error) {
         console.log(error.message)
-        return res.status(400).json({message:"getCurrentUser Error"})
+        return res.status(400).json({message:`getCurrentUser error ${error.message}`})
     }
 }
 
@@ -39,8 +39,23 @@ const updateProfile = async(req,res)=>{
         return res.status(200).json(user)
     } catch (error) {
         console.log(error)
-        return res.status(500).json({message:"update Profile Error"})
+        return res.status(500).json({message:`updateProfile error ${error.message}`})
     }
 }
 
-module.exports = {getCurrentUser,updateProfile}
+const getProfile=async(req,res)=>{
+    try {
+        const {userName} = req.params 
+        const user = await User.findOne({userName}).select("-password")
+
+        if(!user){
+            return res.status(400).json({message:"user doesn't exist"})
+        }
+        res.status(200).json(user)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:`getProfile error : ${error.message}`})
+    }
+}
+
+module.exports = {getCurrentUser,updateProfile,getProfile}

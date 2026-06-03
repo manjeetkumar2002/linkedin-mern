@@ -8,7 +8,7 @@ import { RxCrossCircled } from "react-icons/rx";
 const Network = () => {
     let {serverUrl} = useContext(authDataContext)
     let [connections,setConnections] = useState([])
-    const hnadleGetRequests = async()=>{
+    const handleGetRequests = async()=>{
         try {
             let result = await axios.get(`${serverUrl}/api/connection/requests`,{withCredentials:true})
             console.log(result)
@@ -21,7 +21,7 @@ const Network = () => {
     const handleAcceptConnection =async (requestId)=>{
         try {
             let result = await axios.put(`${serverUrl}/api/connection/accept/${requestId}`,{},{withCredentials:true})
-            setConnections(connections.filter((con)=>con._id==requestId))
+            setConnections(connections.filter((con)=>con._id!==requestId))
         } catch (error) {
             console.log(error);
         }
@@ -29,7 +29,7 @@ const Network = () => {
     const handleRejectConnection =async (requestId)=>{
         try {
             let result = await axios.put(`${serverUrl}/api/connection/reject/${requestId}`,{},{withCredentials:true})
-            setConnections(connections.filter((con)=>con._id==requestId))
+            setConnections(connections.filter((con)=>con._id!==requestId))
         } catch (error) {
             console.log(error);
         }
@@ -37,11 +37,11 @@ const Network = () => {
     
 
     useEffect(()=>{
-        hnadleGetRequests()
+        handleGetRequests()
     },[])
   return (
     <div className='w-screen h-[100vh] bg-[#f0efe7] pt-[100px] px-[20px]
-    flex flex-col gap-[40px]'>
+    flex flex-col gap-[40px] items-center'>
         <Nav/>
         <div className='w-full h-[100px] bg-[white] shadow-lg
         rounded-lg flex items-center p-[10px] text-[22px] text-gray-600'>
