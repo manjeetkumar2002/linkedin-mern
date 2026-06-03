@@ -46,7 +46,7 @@ const Nav = () => {
         {/* right div*/}
         <div className='flex items-center gap-[20px] relative'>
             {/* pop up div */}
-            {showPopUp &&  <div className='absolute top-[75px] w-[300px] min-h-[300px] bg-white shadow-lg rounded-lg 
+            {showPopUp &&  <div className='absolute top-[75px] w-[300px] right-0 min-h-[300px] bg-white shadow-lg rounded-lg 
             flex flex-col items-center p-[20px] gap-[20px]'>
                 <div className='w-[70px] h-[70px] overflow-hidden rounded-full'>
                 <img src={userData.profileImage||dp} alt="profile" className='w-full h-full'/>
@@ -54,7 +54,7 @@ const Nav = () => {
                 <div className='text-[19px] font-semibold text-gray-700'>
                     {`${userData?.firstName} ${userData?.lastName}`}
                 </div>
-                <button className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>View Profile</button>
+                <button onClick={()=>navigate("/profile")} className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>View Profile</button>
                 <hr className='w-full text-gray-700 h-[1px]'/>
                 <div  onClick={()=>navigate("/network")} className="flex items-center justify-start text-gray-600 w-full gap-[10px]">
                 <FaUserGroup className='w-[20px] h-[20px]' />
@@ -64,7 +64,7 @@ const Nav = () => {
             </div>}
            
 
-            <div className='hidden lg:flex flex-col items-center justify-center text-gray-600'>
+            <div onClick={()=>navigate("/")}  className='hidden lg:flex flex-col items-center justify-center text-gray-600'>
                 <MdHome className='w-[23px] h-[23px]' />
                 <div>Home</div>
             </div>

@@ -77,13 +77,13 @@ console.log(comments)
           />
         </div>
         <div>
-          <div className="text-[20px] font-semibold">
+          <div className="text-[19px] font-semibold">
             {`${author?.firstName} ${author?.lastName}`}
           </div>
           <div className="text-gray-600 text-[16px] font-semibold">
             {author?.headline || ""}
           </div>
-          <div className="text-gray-600 text-[16px] font-semibold">
+          <div className="text-gray-600 text-[15px] font-semibold">
             {moment(createdAt).fromNow()}
           </div>
 
@@ -104,18 +104,18 @@ console.log(comments)
 >
   {description}
 </div>
-      <div className="pl-[50px] text-[16px] font-semibold cursor-pointer" onClick={()=>setMore(!more)}>{more?"read less...":"read more..."}</div>
+      <div className="pl-[50px] text-[15px] font-semibold cursor-pointer" onClick={()=>setMore(!more)}>{more?"read less...":"read more..."}</div>
       {image && 
       <div className="w-full h-[300px] overflow-hidden flex justify-center rounded-lg">
         <img src={image} alt="" className="h-full rounded-lg" />
       </div>
       }      
       <div>
-        <div className="pb-2 flex justify-between text-[18px] border-b-1 border-gray-500">
-          <div className="flex items-center gap-1"><AiOutlineLike className="text-blue-500" /><span>{likes.length}</span></div>
+        <div className="pb-2 flex justify-between text-[16px] border-b-1 border-gray-500">
+          <div className="flex items-center gap-1"><AiOutlineLike className="text-[19px] text-blue-500" /><span>{likes.length}</span></div>
           <div  onClick={()=>setShowComment(!showComment)} className="cursor-pointer flex items-center gap-1"><span>{comments?.length}</span>comments</div>
         </div>
-        <div className="text-[18px] font-semibold flex gap-[10px] items-center mt-[20px]">
+        <div className="text-[16px] font-semibold flex gap-[10px] items-center mt-[20px]">
           <div  onClick={handleLike} className={`flex gap-[10px] items-center cursor-pointer ${likes.includes(userData._id)?"text-blue-500":""}`}>{likes.includes(userData._id)?<BiSolidLike className="text-blue-500" />:<AiOutlineLike />} {likes.includes(userData._id)?"Liked":"Like"}</div>
           <div onClick={()=>setShowComment(!showComment)} className="cursor-pointer flex gap-[10px] items-center"><FaRegCommentDots/>Comment</div>
         </div>
