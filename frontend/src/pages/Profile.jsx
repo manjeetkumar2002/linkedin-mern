@@ -21,9 +21,9 @@ const Profile = () => {
   useEffect(() => {
     // filter the user post
     setProfilePost(postData.filter((post) => post.author._id == profileData._id));
-  }, []);
+  }, [profileData]);
   return (
-    <div className="gap-[10px] w-full bg-[#f0efe7] flex flex-col items-center pt-[100px]">
+    <div className="min-h-[100vh] gap-[10px] w-full bg-[#f0efe7] flex flex-col items-center ">
       <Nav />
       {/* edit profile */}
       {edit && <EditProfile />}

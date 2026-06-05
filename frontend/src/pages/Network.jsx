@@ -40,7 +40,7 @@ const Network = () => {
         handleGetRequests()
     },[])
   return (
-    <div className='w-screen h-[100vh] bg-[#f0efe7] pt-[100px] px-[20px]
+    <div className='w-screen h-[100vh] bg-[#f0efe7]  px-[20px]
     flex flex-col gap-[40px] items-center'>
         <Nav/>
         <div className='w-full h-[100px] bg-[white] shadow-lg

@@ -1,6 +1,5 @@
 const express = require("express")
-const {getCurrentUser, getProfile} = require("../controllers/user.controllers.js")
-const {updateProfile} = require("../controllers/user.controllers.js")
+const {getCurrentUser, getProfile,search,updateProfile} = require("../controllers/user.controllers.js")
 const isAuth = require("../middlewares/isAuth.js")
 const upload = require("../middlewares/multer.js")
 const userRouter = express.Router()
@@ -12,4 +11,6 @@ userRouter.put("/updateprofile",isAuth,upload.fields([
     {name:"coverImage",maxCount:1}
 ]),updateProfile)
 userRouter.get("/profile/:userName",isAuth,getProfile)
+userRouter.get("/search",isAuth,search)
+
 module.exports = userRouter

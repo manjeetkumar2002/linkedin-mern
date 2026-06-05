@@ -52,10 +52,11 @@ const Home = () => {
     }
   }
   return (
-    <div className='pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] pt-[100px]
-    flex flex-col lg:flex-row items-center lg:items-start justify-center gap-[20px] px-[20px]'>
+    <div className='pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] 
+    flex flex-col  items-center justify-center gap-[20px] '>
       {edit && <EditProfile/>}
       <Nav></Nav>
+      <div className='flex lg:flex-row flex-col gap-2 items-start'>
       <div className='p-[10px] rounded-lg lg:w-[25%] w-full  min-h-[200px] bg-white shadow-lg relative'>
         {/* background image */}
         <div onClick={()=>setEdit(!edit)} className='w-full h-[100px] bg-gray-400 rounded overflow-hidden 
@@ -136,6 +137,7 @@ const Home = () => {
       </div>
       {/* sidebar */}
       <div className='lg:w-[25%] w-full  min-h-[200px] bg-white shadow-lg'></div>
+      </div>
     </div>
   )
 }
