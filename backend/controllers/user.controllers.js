@@ -80,4 +80,27 @@ const search = async (req,res)=>{
         res.status(500).json({message:`search error : ${error.message}`})
     }
 }
-module.exports = {getCurrentUser,updateProfile,getProfile,search}
+
+const getSuggestedUser = async(req,res)=>{
+    try {
+        // we dont show the current user and their already connections in suggestions
+        let currentUser = await User.findById(req.userId).select("connections")
+
+        let suggestedUsers = await User.find({
+            _id:{
+                 // ne = not equal
+            $ne:currentUser,
+            // nin = not in
+            $nin:currentUser.connections
+            }
+           
+        }).select("-password")
+
+        res.status(200).json(suggestedUsers)
+
+    } catch (error) {
+         console.log(error)
+        res.status(500).json({message:`suggestedUser error : ${error.message}`})
+    }
+}
+module.exports = {getCurrentUser,updateProfile,getProfile,search,getSuggestedUser}

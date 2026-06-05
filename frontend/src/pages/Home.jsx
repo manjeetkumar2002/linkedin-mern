@@ -1,145 +1,271 @@
-import React,{useRef, useState} from 'react'
-import Nav from "../components/Nav"
-import dp from "../assets/default-profile.jpg"
+import React, { useRef, useState } from "react";
+import Nav from "../components/Nav";
+import dp from "../assets/default-profile.jpg";
 import { FaPlus } from "react-icons/fa6";
 import { CiCamera } from "react-icons/ci";
 import { HiPencil } from "react-icons/hi2";
-import { useContext } from 'react';
-import { userDataContext } from '../context/UserContext';
-import EditProfile from '../components/EditProfile';
-import {RxCross1} from "react-icons/rx"
+import { useContext } from "react";
+import { userDataContext } from "../context/UserContext";
+import EditProfile from "../components/EditProfile";
+import { RxCross1 } from "react-icons/rx";
 import { FaRegImage } from "react-icons/fa6";
-import { authDataContext } from '../context/AuthContext';
-import axios from "axios"
-import Post from '../components/Post';
+import { authDataContext } from "../context/AuthContext";
+import axios from "axios";
+import Post from "../components/Post";
+import { useEffect } from "react";
 const Home = () => {
-  let {userData,edit,setEdit} = useContext(userDataContext)
+  let { userData, edit, setEdit } = useContext(userDataContext);
   // post image state variable
-  let [frontendImage,setFrontendImage] = useState("")
-  let [backendImage,setBackendImage] = useState("")
-  let [description,setDescription] = useState("")
-  let image = useRef()
-  let [uploadPost,setUploadPost] = useState(false)
-  let {serverUrl} = useContext(authDataContext)
-  let [posting,setPosting] = useState(false)
-  let {postData,setPostData} = useContext(userDataContext)
+  let [frontendImage, setFrontendImage] = useState("");
+  let [backendImage, setBackendImage] = useState("");
+  let [description, setDescription] = useState("");
+  let image = useRef();
+  let [uploadPost, setUploadPost] = useState(false);
+  let { serverUrl } = useContext(authDataContext);
+  let [posting, setPosting] = useState(false);
+  let { postData, setPostData ,getProfile } = useContext(userDataContext);
+  let [suggestedUser, setSuggestedUser] = useState([]);
   function handleImage(e) {
-    let file = e.target.files[0]
-    setBackendImage(file)
-    setFrontendImage(URL.createObjectURL(file))
+    let file = e.target.files[0];
+    setBackendImage(file);
+    setFrontendImage(URL.createObjectURL(file));
   }
-  async function handleUploadPost(){
-    setPosting(true)
+  async function handleUploadPost() {
+    setPosting(true);
     try {
-      let formData = new FormData()
-      formData.append("description",description)
-      if(backendImage){
-        formData.append("image",backendImage)
+      let formData = new FormData();
+      formData.append("description", description);
+      if (backendImage) {
+        formData.append("image", backendImage);
       }
 
-      const result = await axios.post(serverUrl+"/api/post/create",formData,{
-        withCredentials:true
-      })
-      console.log(result)
-      setUploadPost(false)
-      setDescription("")
-      setFrontendImage("")
-      setBackendImage("")
-      setPosting(false)
+      const result = await axios.post(
+        serverUrl + "/api/post/create",
+        formData,
+        {
+          withCredentials: true,
+        },
+      );
+      console.log(result);
+      setUploadPost(false);
+      setDescription("");
+      setFrontendImage("");
+      setBackendImage("");
+      setPosting(false);
     } catch (error) {
-      setPosting(false)
-      console.log("post upload error :",error)
+      setPosting(false);
+      console.log("post upload error :", error);
     }
   }
+
+  async function handleSuggestedUsers() {
+    try {
+      const result = await axios.get(serverUrl + "/api/user/suggestedusers", {
+        withCredentials: true,
+      });
+      console.log("sugested",result.data)
+      setSuggestedUser(result.data);
+    } catch (error) {
+      console.log("suggested User error", error);
+    }
+  }
+  useEffect(() => {
+    handleSuggestedUsers();
+  }, []);
   return (
-    <div className='pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] 
-    flex flex-col  items-center justify-center gap-[20px] '>
-      {edit && <EditProfile/>}
+    <div
+      className="pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] 
+    flex flex-col  items-center justify-center gap-[20px] "
+    >
+      {edit && <EditProfile />}
       <Nav></Nav>
-      <div className='flex lg:flex-row flex-col gap-2 items-start'>
-      <div className='p-[10px] rounded-lg lg:w-[25%] w-full  min-h-[200px] bg-white shadow-lg relative'>
-        {/* background image */}
-        <div onClick={()=>setEdit(!edit)} className='w-full h-[100px] bg-gray-400 rounded overflow-hidden 
-        flex items-center justify-center relative  cursor-pointer'>
-          <img src={userData.coverImage || null} alt="background-image" className='w-full' />
-          <CiCamera className='absolute top-[20px] right-[20px] w-[25px] h-[25px] text-white font-extrabold '/>
-        </div>
-        {/* dp image */}
-        <div onClick={()=>setEdit(!edit)} className=' cursor-pointer absolute top-[65px] left-[35px] w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center'>
-          <img src={userData.profileImage || dp} alt="profile" className='w-full h-full'/>
-        </div>
-        <div onClick={()=>setEdit(!edit)} className='cursor-pointer absolute top-[105px] left-[90px]   rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold'>
-          <FaPlus  />
-        </div>
-        <div className='mt-[30px] pl-[20px] font-semibold text-gray-700'>
-          <div className='text-[22px] '> 
-            {`${userData?.firstName} ${userData?.lastName}`}
+      <div className="flex lg:flex-row flex-col gap-2 items-start">
+        <div className="p-[10px] rounded-lg lg:w-[25%] w-full  min-h-[200px] bg-white shadow-lg relative">
+          {/* background image */}
+          <div
+            onClick={() => setEdit(!edit)}
+            className="w-full h-[100px] bg-gray-400 rounded overflow-hidden 
+        flex items-center justify-center relative  cursor-pointer"
+          >
+            <img
+              src={userData.coverImage || null}
+              alt="background-image"
+              className="w-full"
+            />
+            <CiCamera className="absolute top-[20px] right-[20px] w-[25px] h-[25px] text-white font-extrabold " />
           </div>
-          <div  className='text-gray-600 text-[18px] font-semibold'>{userData?.headline || ""}</div>
-          <div className='text-gray-500 text-[16px]'>
-            {userData?.location}
+          {/* dp image */}
+          <div
+            onClick={() => setEdit(!edit)}
+            className=" cursor-pointer absolute top-[65px] left-[35px] w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center"
+          >
+            <img
+              src={userData.profileImage || dp}
+              alt="profile"
+              className="w-full h-full"
+            />
           </div>
-          <div>
-           <button onClick={()=>setEdit(!edit)} className='my-[20px] w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2  flex gap-[10px] justify-center items-center '>Edit Profile<HiPencil/></button>
+          <div
+            onClick={() => setEdit(!edit)}
+            className="cursor-pointer absolute top-[105px] left-[90px]   rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold"
+          >
+            <FaPlus />
+          </div>
+          <div className="mt-[30px] pl-[20px] font-semibold text-gray-700">
+            <div className="text-[22px] ">
+              {`${userData?.firstName} ${userData?.lastName}`}
+            </div>
+            <div className="text-gray-600 text-[18px] font-semibold">
+              {userData?.headline || ""}
+            </div>
+            <div className="text-gray-500 text-[16px]">
+              {userData?.location}
+            </div>
+            <div>
+              <button
+                onClick={() => setEdit(!edit)}
+                className="my-[20px] w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2  flex gap-[10px] justify-center items-center "
+              >
+                Edit Profile
+                <HiPencil />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* post popup model */}
-      {uploadPost &&<div className='w-full h-full bg-black opacity-[0.6] fixed top-0 left-0 right-0 z-[100]'>
-      </div> }
-      {uploadPost && <div className='p-[20px] w-[90%] max-w-[500px] h-[600px] bg-white
-      shadow-lg rounded-lg fixed z-[200] flex items-start justify-start flex-col gap-[20px]'>
-        <div><RxCross1 onClick={()=>setUploadPost(false)} className='w-[25px] h-[25px] font-bold top-[20px] right-[20px] text-gray-800 cursor-pointer absolute text-xl'/>
-        </div>
-        <div className='flex items-center justify-start gap-[10px]'> 
-            <div className=' cursor-pointer w-[60px] h-[60px] overflow-hidden rounded-full flex items-center justify-center'>
-          <img src={userData.profileImage || dp} alt="profile" className='w-full h-full'/>
-        </div>
-          <div className='text-[22px] '> 
-            {`${userData?.firstName} ${userData?.lastName}`}
-          </div>
-        </div>
-          {/* input textarea */}
-          <textarea value={description} onChange={(e)=>setDescription(e.target.value)} className={`w-full ${frontendImage?"h-[200px]":"h-[550px]"} outline-none p-[10px] resize-none text-[20px]`} placeholder='what do you want to talk about...?' ></textarea>
-          <input onChange={handleImage} type="file" accept={"/image/*"} ref={image} hidden  />
-            <div className='w-full h-[300px] overflow-hidden flex justify-center items-center'>
-              <img className='h-full rounded-lg'  src={frontendImage || null} alt="" />
+        {/* post popup model */}
+        {uploadPost && (
+          <div className="w-full h-full bg-black opacity-[0.6] fixed top-0 left-0 right-0 z-[100]"></div>
+        )}
+        {uploadPost && (
+          <div
+            className="p-[20px] w-[90%] max-w-[500px] h-[600px] bg-white
+      shadow-lg rounded-lg fixed z-[200] flex items-start justify-start flex-col gap-[20px]"
+          >
+            <div>
+              <RxCross1
+                onClick={() => setUploadPost(false)}
+                className="w-[25px] h-[25px] font-bold top-[20px] right-[20px] text-gray-800 cursor-pointer absolute text-xl"
+              />
             </div>
-          <div className='w-full h-[200px] flex flex-col items-start'>
-            <div className='w-full border-b-2 border-gray-500 p-[20px] flex items-center justify-start'>
-              <FaRegImage onClick={()=>image.current.click()} className='w-[24px] h-[24px] text-gray-500' />
-            </div>
-            
-            <div className='w-full mt-[40px] flex justify-end items-center'>
-              <button  disabled={posting} onClick={handleUploadPost} className='bg-[#24b2ff] text-white px-[20px] py-[10px] rounded-lg'>{posting?"posting...":"Post"}</button>
-            </div>
-          </div>
-
-      </div>}
-      
-      {/* posts */}
-      <div className='flex flex-col gap-[20px] lg:w-[50%] w-full  min-h-[200px] bg-[#f0efe7] shadow-lg'>
-          <div className='p-[20px]  gap-[10px] flex items-center justify-center w-full h-[120px] bg-white shadow-lg rounded-lg'>
-              <div className=' cursor-pointer  w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center'>
-              <img src={userData.profileImage || dp} alt="profile" className='w-full h-full'/>
+            <div className="flex items-center justify-start gap-[10px]">
+              <div className=" cursor-pointer w-[60px] h-[60px] overflow-hidden rounded-full flex items-center justify-center">
+                <img
+                  src={userData.profileImage || dp}
+                  alt="profile"
+                  className="w-full h-full"
+                />
               </div>
-                <button onClick={()=>setUploadPost(true)} className='text-start p-[15px] hover:bg-gray-200 cursor-pointer rounded-full w-[80%] h-[60px] border-2 border-gray-500'>start a post</button>
+              <div className="text-[22px] ">
+                {`${userData?.firstName} ${userData?.lastName}`}
+              </div>
+            </div>
+            {/* input textarea */}
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={`w-full ${frontendImage ? "h-[200px]" : "h-[550px]"} outline-none p-[10px] resize-none text-[20px]`}
+              placeholder="what do you want to talk about...?"
+            ></textarea>
+            <input
+              onChange={handleImage}
+              type="file"
+              accept={"/image/*"}
+              ref={image}
+              hidden
+            />
+            <div className="w-full h-[300px] overflow-hidden flex justify-center items-center">
+              <img
+                className="h-full rounded-lg"
+                src={frontendImage || null}
+                alt=""
+              />
+            </div>
+            <div className="w-full h-[200px] flex flex-col items-start">
+              <div className="w-full border-b-2 border-gray-500 p-[20px] flex items-center justify-start">
+                <FaRegImage
+                  onClick={() => image.current.click()}
+                  className="w-[24px] h-[24px] text-gray-500"
+                />
+              </div>
+
+              <div className="w-full mt-[40px] flex justify-end items-center">
+                <button
+                  disabled={posting}
+                  onClick={handleUploadPost}
+                  className="bg-[#24b2ff] text-white px-[20px] py-[10px] rounded-lg"
+                >
+                  {posting ? "posting..." : "Post"}
+                </button>
+              </div>
+            </div>
           </div>
-          {
-            postData &&
-            postData.map((post,index)=>(
-              <Post id={post._id} author={post.author}
-              description={post.description} image={post.image} like={post.like} 
-              comment={post.comment} createdAt={post.createdAt} key={index}/>
-            ))
-          }
-      </div>
-      {/* sidebar */}
-      <div className='lg:w-[25%] w-full  min-h-[200px] bg-white shadow-lg'></div>
+        )}
+
+        {/* posts */}
+        <div className="flex flex-col gap-[20px] lg:w-[50%] w-full  min-h-[200px] bg-[#f0efe7] shadow-lg">
+          <div className="p-[20px]  gap-[10px] flex items-center justify-center w-full h-[120px] bg-white shadow-lg rounded-lg">
+            <div className=" cursor-pointer  w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center">
+              <img
+                src={userData.profileImage || dp}
+                alt="profile"
+                className="w-full h-full"
+              />
+            </div>
+            <button
+              onClick={() => setUploadPost(true)}
+              className="text-start p-[15px] hover:bg-gray-200 cursor-pointer rounded-full w-[80%] h-[60px] border-2 border-gray-500"
+            >
+              start a post
+            </button>
+          </div>
+          {postData &&
+            postData.map((post, index) => (
+              <Post
+                id={post._id}
+                author={post.author}
+                description={post.description}
+                image={post.image}
+                like={post.like}
+                comment={post.comment}
+                createdAt={post.createdAt}
+                key={index}
+              />
+            ))}
+        </div>
+        {/* sidebar (suggestedUser ) */}
+        <div className="lg:w-[25%] p-[20px] w-full   bg-white shadow-lg hidden lg:flex flex-col gap-[10px]">
+        <h1 className="text-[20px] text-gray-600 font-semibold">
+          Suggested Users
+        </h1>
+        {suggestedUser.length > 0 && 
+          <div className="flex flex-col gap-[10px]">
+            {suggestedUser.map((su, index) => (
+              <div onClick={()=>getProfile(su.userName)} key={index} className="p-2 rounded-lg cursor-pointer hover:bg-gray-200 mt-[10px] flex items-center gap-[10px]">
+                <div className="w-[40px] h-[40px] overflow-hidden rounded-full">
+                  <img
+                    src={su.profileImage || dp}
+                    alt="profile"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div>     
+                  <div className="text-[16px] font-semibold text-gray-700">
+                    {`${su?.firstName} ${su?.lastName}`}
+                  </div>
+                  <div className="text-[12px] font-semibold text-gray-700">
+                    {su.headline}
+                  </div>  
+                </div>
+              </div>
+            ))}
+          </div>
+        }
+        {suggestedUser.length == 0 && <div>No Suggested Users</div>}
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
