@@ -14,7 +14,6 @@ const ConnectionButton = ({userId}) => {
     const handleSendConnection = async()=>{
         try {
             const result = await axios.post(`${serverUrl}/api/connection/send/${userId}`,{},{withCredentials:true})
-            console.log(result)
         } catch (error) {
             console.log(error)
         }
@@ -22,7 +21,6 @@ const ConnectionButton = ({userId}) => {
     const handleRemoveConnection=async()=>{
         try {
             const result = await axios.delete(`${serverUrl}/api/connection/remove/${userId}`,{withCredentials:true})
-            console.log(result)
         } catch (error) {
             console.log(error)
         }
@@ -31,7 +29,6 @@ const ConnectionButton = ({userId}) => {
     const handleGetStatus = async()=>{
         try {
             const result = await axios.get(`${serverUrl}/api/connection/getstatus/${userId}`,{withCredentials:true})
-            console.log("status: ",result.data.status)
             setStatus(result.data.status)
         } catch (error) {
             console.log(error)

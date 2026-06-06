@@ -70,7 +70,7 @@ const search = async (req,res)=>{
                 {firstName:{$regex:query,$options:"i"}},
                 {lastName:{$regex:query,$options:"i"}},
                 {userName:{$regex:query,$options:"i"}},
-                {skills:{$in:[query]}}
+                { skills: { $regex: query, $options: "i" } }
             ]
         }) 
 

@@ -59,6 +59,8 @@ const like = async (req,res)=>{
         }
         else{
             post.like.push(userId)
+            
+            if(userId !== post.author._id.toString()){
             // we send the notification to the post author ,userId like the post
             let notification = await Notification.create({
                 receiver:post.author,
@@ -66,6 +68,7 @@ const like = async (req,res)=>{
                 relatedPost:postId,
                 relatedUser:userId
             })
+            }
         }
         await post.save();
         // broadcasting updated likes to all users
@@ -90,13 +93,15 @@ const comment = async (req,res)=>{
             $push:{comment:{content,user:userId}}
         },{new:true})
         .populate("comment.user","firstName lastName profileImage headline")
-        
-        let notification = await Notification.create({
+        if(userId !== post.author._id.toString()){
+            let notification = await Notification.create({
                 receiver:post.author,
                 type:"comment",
                 relatedPost:postId,
                 relatedUser:userId
         })
+        }
+        
         
         
         // broadcasting the newly added comment to all user

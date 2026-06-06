@@ -22,11 +22,9 @@ let [commentContent,setCommentContent] = useState("")
 let [comments,setComments] = useState(comment || [])
 let [showComment,setShowComment] = useState(false)
 let {getProfile,profileData,setProfileData} = useContext(userDataContext)
-console.log(comments)
   const handleLike = async()=>{
     try {
       let result = await axios.get(serverUrl+`/api/post/like/${id}`,{withCredentials:true})
-      console.log(result.data)
       setLikes(result.data.like)
     } catch (error) {
       console.log(error)

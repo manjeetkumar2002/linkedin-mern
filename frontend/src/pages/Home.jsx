@@ -23,7 +23,7 @@ const Home = () => {
   let [uploadPost, setUploadPost] = useState(false);
   let { serverUrl } = useContext(authDataContext);
   let [posting, setPosting] = useState(false);
-  let { postData, setPostData ,getProfile } = useContext(userDataContext);
+  let { postData, setPostData ,getProfile,getPost } = useContext(userDataContext);
   let [suggestedUser, setSuggestedUser] = useState([]);
   function handleImage(e) {
     let file = e.target.files[0];
@@ -46,12 +46,12 @@ const Home = () => {
           withCredentials: true,
         },
       );
-      console.log(result);
       setUploadPost(false);
       setDescription("");
       setFrontendImage("");
       setBackendImage("");
       setPosting(false);
+      await getPost()
     } catch (error) {
       setPosting(false);
       console.log("post upload error :", error);
@@ -63,7 +63,6 @@ const Home = () => {
       const result = await axios.get(serverUrl + "/api/user/suggestedusers", {
         withCredentials: true,
       });
-      console.log("sugested",result.data)
       setSuggestedUser(result.data);
     } catch (error) {
       console.log("suggested User error", error);
@@ -74,13 +73,13 @@ const Home = () => {
   }, []);
   return (
     <div
-      className="pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] 
-    flex flex-col  items-center justify-center gap-[20px] "
+      className="w-full pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] 
+    flex flex-col  items-center justify-start gap-[20px] "
     >
       {edit && <EditProfile />}
       <Nav></Nav>
-      <div className="flex lg:flex-row flex-col gap-2 items-start">
-        <div className="p-[10px] rounded-lg lg:w-[25%] w-full  min-h-[200px] bg-white shadow-lg relative">
+      <div className="w-full flex lg:flex-row flex-col gap-2 items-start">
+        <div className="p-[10px] rounded-lg lg:min-w-[25%] w-full  min-h-[200px] bg-white shadow-lg relative">
           {/* background image */}
           <div
             onClick={() => setEdit(!edit)}
@@ -89,7 +88,7 @@ const Home = () => {
           >
             <img
               src={userData.coverImage || null}
-              alt="background-image"
+              alt=""
               className="w-full"
             />
             <CiCamera className="absolute top-[20px] right-[20px] w-[25px] h-[25px] text-white font-extrabold " />
@@ -139,8 +138,9 @@ const Home = () => {
         )}
         {uploadPost && (
           <div
-            className="p-[20px] w-[90%] max-w-[500px] h-[600px] bg-white
-      shadow-lg rounded-lg fixed z-[200] flex items-start justify-start flex-col gap-[20px]"
+            className="fixed top-1/2 left-1/2
+    -translate-x-1/2 -translate-y-1/2 p-[20px] mx-auto w-[90%] max-w-[500px] h-[600px] bg-white
+      shadow-lg rounded-lg fixed z-[300] flex items-start justify-start flex-col gap-[20px]"
           >
             <div>
               <RxCross1
@@ -203,7 +203,7 @@ const Home = () => {
         )}
 
         {/* posts */}
-        <div className="flex flex-col gap-[20px] lg:w-[50%] w-full  min-h-[200px] bg-[#f0efe7] shadow-lg">
+        <div className="flex flex-col gap-[20px] lg:min-w-[50%] w-full  bg-[#f0efe7] shadow-lg">
           <div className="p-[20px]  gap-[10px] flex items-center justify-center w-full h-[120px] bg-white shadow-lg rounded-lg">
             <div className=" cursor-pointer  w-[70px] h-[70px] overflow-hidden rounded-full flex items-center justify-center">
               <img
@@ -234,7 +234,7 @@ const Home = () => {
             ))}
         </div>
         {/* sidebar (suggestedUser ) */}
-        <div className="lg:w-[25%] p-[20px] w-full   bg-white shadow-lg hidden lg:flex flex-col gap-[10px]">
+        <div className="lg:min-w-[25%] p-[20px] w-full   bg-white shadow-lg hidden lg:flex flex-col gap-[10px]">
         <h1 className="text-[20px] text-gray-600 font-semibold">
           Suggested Users
         </h1>

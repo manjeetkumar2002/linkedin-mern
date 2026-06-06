@@ -6,6 +6,7 @@ import { useContext} from "react"
 import {userDataContext} from "./context/UserContext"
 import Network from "./pages/Network"
 import Profile from "./pages/Profile"
+import Notification from "./pages/Notification"
 function App() {
   const {userData} = useContext(userDataContext)
   console.log("userData :",userData)
@@ -17,6 +18,7 @@ function App() {
         <Route path="/login" element={userData?<Navigate to="/"/>:<Login/>} />
         <Route path="/network" element={userData?<Network/>:<Navigate to="/login" />} />
         <Route path="/profile" element={userData?<Profile/>:<Navigate to="/login" />} />
+        <Route path="/notification" element={userData?<Notification/>:<Navigate to="/login" />} />
       </Routes>
     </>
   )

@@ -129,7 +129,6 @@ const EditProfile = () => {
         let result = await axios.put(serverUrl+"/api/user/updateprofile",formData,{
           withCredentials:true
         })
-        console.log(result)
         setUserData(result.data)
         setSaving(false)
         setEdit(false)
@@ -155,7 +154,7 @@ const EditProfile = () => {
             <div onClick={()=>profileImage.current.click()} className='absolute top-[150px] left-[30px] w-[80px] h-[80px] overflow-hidden rounded-full'>
               <img src={frontendProfileImage} alt="profile" className='w-full h-full'/>
             </div>
-            <div  className='cursor-pointer absolute top-[200px] left-[90px] rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold'>
+            <div onClick={()=>profileImage.current.click()}  className='cursor-pointer absolute top-[200px] left-[90px] rounded-full p-[1px] text-white bg-[#2dc0ff] text-xl font-extrabold'>
               <FaPlus  />
             </div>
             {/* form */}
@@ -231,7 +230,7 @@ const EditProfile = () => {
                 {/* input new Experience */}
                 <div  className='flex flex-col gap-[10px] items-start'>
                     <input className='w-full h-[50px] outline-none border-2 rounded-lg border-gray-600 px-[10px] py-[5px] text-[16px]' type="text" placeholder='title' value={newExperience.title} onChange={(e)=>setNewExperience({...newExperience,title:e.target.value})}/>
-                    <input className='w-full h-[50px] outline-none border-2 rounded-lg border-gray-600 px-[10px] py-[5px] text-[16px]' type="text" placeholder='co' value={newExperience.company} onChange={(e)=>setNewExperience({...newExperience,company:e.target.value})}/>
+                    <input className='w-full h-[50px] outline-none border-2 rounded-lg border-gray-600 px-[10px] py-[5px] text-[16px]' type="text" placeholder='company   ' value={newExperience.company} onChange={(e)=>setNewExperience({...newExperience,company:e.target.value})}/>
                     <input className='w-full h-[50px] outline-none border-2 rounded-lg border-gray-600 px-[10px] py-[5px] text-[16px]' type="text" placeholder='description' value={newExperience.description} onChange={(e)=>setNewExperience({...newExperience,description:e.target.value})}/>
                     <button onClick={addExperience} className='w-[100%] h-[40px] rounded-full text-[#2dc0ff] border-[#2dc0ff] border-2'>Add</button>
                 </div>

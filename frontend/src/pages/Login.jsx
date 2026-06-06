@@ -14,9 +14,7 @@ const Login = () => {
     const [password,setPassword] = useState("")
     const [loading,setLoading] = useState(false)
     const {serverUrl} = useContext(authDataContext)
-    console.log(serverUrl)
     const handleSignIn = async (e) =>{
-        console.log("submit called")
         e.preventDefault()
         setLoading(true)
         try {
@@ -24,7 +22,6 @@ const Login = () => {
                 email,password
             },{withCredentials:true})
 
-            console.log(result)
             setUserData(result.data)
             setLoading(false)
             setEmail("")

@@ -11,7 +11,6 @@ const Network = () => {
     const handleGetRequests = async()=>{
         try {
             let result = await axios.get(`${serverUrl}/api/connection/requests`,{withCredentials:true})
-            console.log(result)
             setConnections(result.data)
         } catch (error) {
             console.log(error)
@@ -50,7 +49,7 @@ const Network = () => {
         {connections?.length>0 && <div className='w-[100%] max-w-[900px] items-center shadow-lg rounded-lg flex flex-col gap-[20px] min-h-[100px]'>
             {
                 connections?.map((connection,index)=>(
-                    <div key={index} className='p-[20px] w-full min-h-[100px] flex justify-between items-center'>
+                    <div key={index} className='p-[20px]  bg-white w-full min-h-[100px] flex justify-between items-center'>
                         <div className='flex items-center justify-center gap-[10px]'>
                             <div className='w-[60px] h-[60px] rounded-full overflow-hidden
                             cursor-pointer'>

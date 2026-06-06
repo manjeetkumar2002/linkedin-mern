@@ -20,7 +20,7 @@ const deleteNotification = async(req,res)=>{
 
         const notification = await Notification.findOneAndDelete({
             _id:id,
-            reciever:req.userId
+            receiver:req.userId
         })
 
         return res.status(200).json({message:"notification deleted successfully"})
@@ -33,7 +33,7 @@ const clearAllNotification = async(req,res)=>{
     try {
 
         const notification = await Notification.deleteMany({
-            reciever:req.userId
+            receiver:req.userId
         })
 
         return res.status(200).json({message:"notification deleted successfully"})

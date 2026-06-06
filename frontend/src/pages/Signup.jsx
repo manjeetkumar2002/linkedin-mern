@@ -17,7 +17,6 @@ const Signup = () => {
     const [loading,setLoading] = useState(false)
     const {serverUrl} = useContext(authDataContext)
     const {userData,setUserData} = useContext(userDataContext)
-    console.log(serverUrl)
     const handleSignUp = async (e) =>{
         console.log("submit called")
         e.preventDefault()
@@ -27,7 +26,6 @@ const Signup = () => {
                 firstName,lastName,userName,email,password
             },{withCredentials:true})
 
-            console.log(result)
             setLoading(false)
             setFirstName("")
             setLastName("")
