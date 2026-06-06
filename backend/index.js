@@ -15,6 +15,7 @@ const server = http.createServer(app)
 // socket.io
 const { setIO } = require("./socket.js");
 const {userSocketMap} = require("./socketStore.js")
+const notificationRouter = require("./routes/notification.routes.js")
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
@@ -34,7 +35,7 @@ app.use("/api/auth",authRouter)
 app.use("/api/user",userRouter)
 app.use("/api/post",postRouter)
 app.use("/api/connection",connectionRouter)
-
+app.use("/api/notification",notificationRouter)
 
 
 io.on("connection",(socket)=>{

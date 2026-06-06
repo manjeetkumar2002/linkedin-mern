@@ -6,6 +6,7 @@ const notificationSchema = new Schema({
         ref:"User"
     },
     // type of the notification (connection accept,like,comment)
+    // we send a notification when someone like ,comment and accept connection
     type:{
         type:String,
         enum:["like","comment","connectionAccepted"]
