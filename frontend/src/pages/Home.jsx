@@ -73,8 +73,8 @@ const Home = () => {
   }, []);
   return (
     <div
-      className="w-full pb-[20px] relative w-full min-h-[100vh] bg-[#f0efe7] 
-    flex flex-col  items-center justify-start gap-[20px] "
+      className="w-full pb-[20px] relative min-h-[100vh] bg-[#f0efe7] 
+    flex flex-col  items-center justify-start gap-[20px] lg:px-[20px] px-0"
     >
       {edit && <EditProfile />}
       <Nav></Nav>
@@ -234,7 +234,7 @@ const Home = () => {
             ))}
         </div>
         {/* sidebar (suggestedUser ) */}
-        <div className="lg:min-w-[25%] p-[20px] w-full   bg-white shadow-lg hidden lg:flex flex-col gap-[10px]">
+        <div className="lg:min-w-[23%] p-[20px] w-full   bg-white shadow-lg hidden lg:flex flex-col gap-[10px]">
         <h1 className="text-[20px] text-gray-600 font-semibold">
           Suggested Users
         </h1>

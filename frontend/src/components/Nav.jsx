@@ -50,7 +50,7 @@ const Nav = () => {
 }, [searchInput]);
 
     return (
-    <div className='px-1 z-[80] left-0 right-0 bg-white w-full h-[80px] fixed top-0 shadow-lg flex items-center  justify-between md:justify-around relative'> 
+    <div className='px-1 z-[80] left-0 right-0 bg-white w-full h-[80px] fixed top-0 shadow-lg flex items-center  justify-between md:justify-around relative '> 
         {/* left div*/}
         <div className='flex justify-center items-center gap-[10px]'>       
         <div onClick={()=>setActiveSearch(false)}>

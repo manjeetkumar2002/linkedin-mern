@@ -18,7 +18,7 @@ const {userSocketMap} = require("./socketStore.js")
 const notificationRouter = require("./routes/notification.routes.js")
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     credentials: true,
   },
 });
@@ -27,7 +27,7 @@ setIO(io);
 
 app.use(express.json())
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:"http://localhost:5174",
     credentials: true
 }))
 app.use(cookieParser())

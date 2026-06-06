@@ -9,7 +9,6 @@ import Profile from "./pages/Profile"
 import Notification from "./pages/Notification"
 function App() {
   const {userData} = useContext(userDataContext)
-  console.log("userData :",userData)
   return (
     <>
       <Routes>
