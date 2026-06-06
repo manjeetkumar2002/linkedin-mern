@@ -1,6 +1,7 @@
 const { getIO } = require("../socket.js");
 const uploadOnCloudinary = require("../config/cloudinary.js")
-const Post = require("../models/post.model.js")
+const Post = require("../models/post.model.js");
+const Notification = require("../models/notification.model.js");
 
 const createPost = async(req,res)=>{
     try{
@@ -58,6 +59,13 @@ const like = async (req,res)=>{
         }
         else{
             post.like.push(userId)
+            // we send the notification to the post author ,userId like the post
+            let notification = await Notification.create({
+                receiver:post.author,
+                type:"like",
+                relatedPost:postId,
+                relatedUser:userId
+            })
         }
         await post.save();
         // broadcasting updated likes to all users
@@ -82,6 +90,15 @@ const comment = async (req,res)=>{
             $push:{comment:{content,user:userId}}
         },{new:true})
         .populate("comment.user","firstName lastName profileImage headline")
+        
+        let notification = await Notification.create({
+                receiver:post.author,
+                type:"comment",
+                relatedPost:postId,
+                relatedUser:userId
+        })
+        
+        
         // broadcasting the newly added comment to all user
         getIO().emit("commentAdded", {
         postId,

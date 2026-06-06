@@ -57,6 +57,7 @@ const sendConnection = async (req,res)=>{
 const acceptConnection = async (req,res)=>{
     try {
         const {connectionId} = req.params //connection id
+        const userId = req.userId
         let connection = await Connection.findById(connectionId)
 
         if(!connection){
@@ -68,6 +69,13 @@ const acceptConnection = async (req,res)=>{
         }
 
         connection.status = "accepted"
+
+        // connectionAccept notification 
+        let notification = await Notification.create({
+            receiver:connection.sender,
+            type:"connectionAccepted",
+            relatedUser:userId
+        })
         await connection.save()
 
         // update the connection array in both sender and receiver
