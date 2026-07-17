@@ -31,7 +31,7 @@ const ConnectionButton = ({ userId }) => {
         setLoading(true)
         try {
             const result = await axios.delete(`${serverUrl}/api/connection/remove/${userId}`, { withCredentials: true })
-            setStatus("disconnect")
+            // setStatus("connect")
         } catch (error) {
             console.log(error)
         } finally {
@@ -62,6 +62,8 @@ const ConnectionButton = ({ userId }) => {
         socket.emit("register", userData._id)
         handleGetStatus()
         socket.on("statusUpdate", ({ updatedUserId, newStatus }) => {
+            console.log("updated",updatedUserId)
+            console.log("userId",userId)
             if (updatedUserId == userId)
                 setStatus(newStatus)
         })
@@ -73,11 +75,13 @@ const ConnectionButton = ({ userId }) => {
 
     // Button configurations based on status
     const getButtonConfig = () => {
+        console.log(status);
+        
         switch (status) {
             case "disconnect":
                 return {
-                    label: "Connect",
-                    icon: <FaUserPlus className="text-[14px]" />,
+                    label: "Disconnect",
+                    icon: <FaUserCheck className="text-[14px]" />,
                     className: "bg-blue-500 hover:bg-blue-600 text-white border-blue-500 hover:border-blue-600 shadow-blue-200"
                 }
             case "pending":
@@ -92,11 +96,11 @@ const ConnectionButton = ({ userId }) => {
                     icon: <FaUserFriends className="text-[14px]" />,
                     className: "bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 shadow-green-200"
                 }
-            case "connected":
+            case "connect":
                 return {
-                    label: "Connected",
-                    icon: <FaUserCheck className="text-[14px]" />,
-                    className: "bg-gray-100 text-gray-700 border-gray-300 hover:bg-red-50 hover:text-red-600 hover:border-red-300 hover:shadow-red-200 group"
+                    label: "Connect",
+                    icon: <FaUserPlus className="text-[14px]" />,
+                     className: "bg-blue-500 hover:bg-blue-600 text-white border-blue-500 hover:border-blue-600 shadow-blue-200"
                 }
             default:
                 return {

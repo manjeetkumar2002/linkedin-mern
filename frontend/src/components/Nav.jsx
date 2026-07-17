@@ -229,7 +229,7 @@ const Nav = () => {
           <IoNotifications className="w-[20px] h-[20px] group-hover:scale-110 transition-transform" />
           <div className="text-xs font-medium mt-0.5 hidden md:block">Notification</div>
           {/* Notification Badge - Optional */}
-          <span className="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+          {/* <span className="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> */}
         </div>
 
         {/* Profile Avatar */}

@@ -82,7 +82,7 @@ const Home = () => {
 
       <div className="w-full max-w-7xl flex lg:flex-row flex-col gap-4 items-start px-3 lg:px-0">
         {/* Left Sidebar - Profile Card */}
-        <div className="lg:sticky lg:top-[88px] lg:w-[280px] w-full flex-shrink-0">
+        <div className="lg:sticky lg:top-[20px] lg:w-[280px] w-full flex-shrink-0">
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 relative">
             {/* Cover Image */}
             <div
@@ -100,10 +100,10 @@ const Home = () => {
             </div>
 
             {/* Profile Image */}
-            <div className="relative px-4 pb-4">
+            <div className="px-4 pb-4">
               <div
                 onClick={() => setEdit(!edit)}
-                className="absolute -top-12 left-4 cursor-pointer group"
+                className="absolute top-[72px] left-4 cursor-pointer group"
               >
                 <div className="relative w-[88px] h-[88px] rounded-full border-4 border-white shadow-lg overflow-hidden">
                   <img
@@ -179,7 +179,7 @@ const Home = () => {
         </div>
 
         {/* Right Sidebar - Suggested Users */}
-        <div className="lg:sticky lg:top-[88px] lg:w-[280px] w-full flex-shrink-0 hidden lg:block">
+        <div className="lg:sticky lg:top-[20px] lg:w-[280px] w-full flex-shrink-0 hidden lg:block">
           <div className="bg-white rounded-2xl shadow-lg p-5 hover:shadow-xl transition-shadow duration-300">
             <h2 className="text-[16px] font-bold text-gray-700 mb-4">
               Suggested Users

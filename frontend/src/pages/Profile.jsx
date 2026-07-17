@@ -54,10 +54,10 @@ const Profile = () => {
           </div>
 
           {/* Profile Image */}
-          <div className="relative px-6 pb-6">
+          <div className="px-6 pb-6">
             <div
               onClick={() => setEdit(!edit)}
-              className={`absolute -top-12 left-6 ${profileData._id == userData._id ? 'cursor-pointer group' : ''}`}
+              className={`absolute top-[150px] left-6 ${profileData._id == userData._id ? 'cursor-pointer group' : ''}`}
             >
               <div className="relative w-[96px] h-[96px] rounded-full border-4 border-white shadow-lg overflow-hidden">
                 <img

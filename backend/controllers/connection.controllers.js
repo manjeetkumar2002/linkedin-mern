@@ -186,6 +186,8 @@ const removeConnection = async (req,res)=>{
         })
         let receiverSocketId = userSocketMap.get(otherUserId) // id is receiver id
         let senderSocketId = userSocketMap.get(myId)
+        console.log("sender",senderSocketId)
+        console.log("receiver",receiverSocketId)
         if(receiverSocketId){
             getIO().to(receiverSocketId).emit("statusUpdate",{
                 updatedUserId:myId,
